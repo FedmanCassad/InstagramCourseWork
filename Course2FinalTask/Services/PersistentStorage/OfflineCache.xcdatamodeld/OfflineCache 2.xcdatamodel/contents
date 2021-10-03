@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20G95" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDPost" representedClassName="CDPost" syncable="YES">
+        <attribute name="author" optional="YES" attributeType="String"/>
+        <attribute name="authorAvatar" optional="YES" attributeType="URI"/>
+        <attribute name="authorUsername" optional="YES" attributeType="String"/>
+        <attribute name="avatarPNGData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="currentUserLikesThisPost" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="image" optional="YES" attributeType="URI"/>
+        <attribute name="imagePNGData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="likedByCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="postDescription" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDUser" representedClassName="CDUser" syncable="YES">
+        <attribute name="avatar" optional="YES" attributeType="URI"/>
+        <attribute name="avatarData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="currentUserFollowsThisUser" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="currentUserIsFollowedByThisUser" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="followedCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="followsCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fullName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="username" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="LoggedUser" representedClassName="LoggedUser" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="CDPost" positionX="-63" positionY="-18" width="128" height="208"/>
+        <element name="CDUser" positionX="109.2444458007812" positionY="-5.625885009765625" width="128" height="178"/>
+        <element name="LoggedUser" positionX="27" positionY="72" width="128" height="44"/>
+    </elements>
+</model>
