@@ -119,7 +119,6 @@
 		D8305BF6266820CD00E1A9F2 /* URLRequest + fastMethodSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest + fastMethodSet.swift"; sourceTree = "<group>"; };
 		D83214482647505500E0AF35 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		D84A170826A445F0007998D2 /* UIImageView + AnimatingAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView + AnimatingAppearance.swift"; sourceTree = "<group>"; };
-		D852850E267DA0BF003269F6 /* AuthorizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationService.swift; sourceTree = "<group>"; };
 		D85729422707963C00409DAE /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		D85C54C4253BA4BC0038D68B /* ChooseFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFilterViewController.swift; sourceTree = "<group>"; };
 		D85C54C6253BB6FC0038D68B /* FiltersThumbnailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersThumbnailCell.swift; sourceTree = "<group>"; };
@@ -180,7 +179,6 @@
 		D8EC727527012D110031B399 /* BiometryIdentificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometryIdentificationService.swift; sourceTree = "<group>"; };
 		D8F4F1F224BA54F700D74CA8 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D8F625152644817400B78578 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
-		D8F62518264491E600B78578 /* LoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,7 +272,6 @@
 			children = (
 				D8749E8526850CE5000CCFA5 /* LoginViewModel.swift */,
 				D8749E8926850D1B000CCFA5 /* LoginViewController.swift */,
-				D8F625172644826200B78578 /* LoginManager */,
 			);
 			path = LoginScreen;
 			sourceTree = "<group>";
@@ -296,14 +293,6 @@
 				D89D40A226FE6178002F72D1 /* PersistentDataProvider.swift */,
 			);
 			path = PersistentStorage;
-			sourceTree = "<group>";
-		};
-		D852850D267DA0A5003269F6 /* AuthorizationService */ = {
-			isa = PBXGroup;
-			children = (
-				D852850E267DA0BF003269F6 /* AuthorizationService.swift */,
-			);
-			path = AuthorizationService;
 			sourceTree = "<group>";
 		};
 		D85DF9DD2537ADE300F947AC /* Filters */ = {
@@ -517,7 +506,6 @@
 			isa = PBXGroup;
 			children = (
 				D8EC727427012CF50031B399 /* SecurityService */,
-				D852850D267DA0A5003269F6 /* AuthorizationService */,
 				D8305BDA265AD77B00E1A9F2 /* PersistentStorage */,
 				D8305BD9265AD77000E1A9F2 /* Networking */,
 				D8F62514264480C600B78578 /* KeychainService */,
@@ -577,14 +565,6 @@
 				D8F625152644817400B78578 /* KeychainService.swift */,
 			);
 			path = KeychainService;
-			sourceTree = "<group>";
-		};
-		D8F625172644826200B78578 /* LoginManager */ = {
-			isa = PBXGroup;
-			children = (
-				D8F62518264491E600B78578 /* LoginManager.swift */,
-			);
-			path = LoginManager;
 			sourceTree = "<group>";
 		};
 		EDADE7C3272A8A84EDAC2CEF /* Frameworks */ = {

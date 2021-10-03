@@ -22,6 +22,7 @@ public enum ErrorHandlingDomain: Error, Equatable {
   case serverUnreachable
   case noUserStored
   case noPostsStored
+  case noTokenStored
   case unavailableInOfflineMode
   case networkError(error: Error)
   var localizedDescription: (String, String) {
@@ -51,6 +52,8 @@ public enum ErrorHandlingDomain: Error, Equatable {
         return ("No offline data", "The requested post or posts not saved at offline store")
       case .unavailableInOfflineMode:
         return ("Offline mode", "This function is unavailable due to offline mode" )
+      case .noTokenStored:
+        return ("Here is no stored accounts", "Please sign in")
     case .requestError(let errorCode):
       switch errorCode.statusCode {
       case 404:

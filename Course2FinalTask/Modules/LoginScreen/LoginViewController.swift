@@ -115,8 +115,15 @@ final class LoginViewController: UIViewController {
       if let error = error {
         DispatchQueue.main.async {
           self.alert(error: error) {action in
-            if error != .tokenExpired {
-              self.viewModel.alertOKButtonTapped()
+            switch error {
+              case .tokenExpired:
+                return
+              case .networkError(error: _):
+                return
+              case .noDataReceived:
+                return
+              default:
+                viewModel.alertOKButtonTapped()
             }
           }
         }

@@ -56,6 +56,10 @@ final class LoginViewModel: ILoginViewModel {
 
   //MARK: - Methods here
   private func checkToken() {
+    guard checkSavedToken() else {
+      error.value = .noTokenStored
+      return
+    }
     dataProvider.checkToken {[unowned self] result in
       switch result {
         case .success:
@@ -97,7 +101,9 @@ final class LoginViewModel: ILoginViewModel {
   }
 
   func checkSavedCredentials() {
-    guard checkSavedToken() else { return }
+    guard checkSavedToken() else {
+      error.value = .noTokenStored
+      return }
     securityService.authenticateUser {[unowned self] loginSuccessful in
       if loginSuccessful {
         guard let login = KeychainService.getLogin(),
@@ -111,6 +117,4 @@ final class LoginViewModel: ILoginViewModel {
   func signInButtonTapped() {
 performLoginFlow()
   }
-
-
 }
