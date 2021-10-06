@@ -14,15 +14,15 @@ protocol IProfileHeaderViewModel: AnyObject, ImageDataSavingAgent {
   var user: Dynamic<User> { get }
   var isCurrentUser: Dynamic<Bool> { get set }
   var logoutSuccess: Dynamic<Bool>? { get set }
-  var error: Dynamic<ErrorHandlingDomain?> { get set}
-  var followersOfFollowsListUsers:(([User]) -> Void)? { get set }
+  var error: Dynamic<ErrorHandlingDomain?> { get set }
+  var followersOfFollowsListUsers: (([User]) -> Void)? { get set }
   var followersText: String { get }
   var followingsText: String { get }
   var avatarImageData: Data? { get }
   var followOrUnfollowButtonTitle: String { get }
-  func logOut() -> Void
-  func followOrUnfollowButtonTapped() -> Void
-  func usersListRequested(by type: UsersListType) -> Void
+  func logOut()
+  func followOrUnfollowButtonTapped()
+  func usersListRequested(by type: UsersListType)
 
 }
 
@@ -63,10 +63,10 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
   func logOut() {
     provider.logOut {[weak self] result in
       switch result {
-        case let .failure(error):
-          self?.error.value = error
-        case .success():
-          self?.logoutSuccess?.value = true
+      case let .failure(error):
+        self?.error.value = error
+      case .success:
+        self?.logoutSuccess?.value = true
       }
     }
   }
@@ -74,10 +74,10 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
   func followOrUnfollowButtonTapped() {
     let updateHandler: UserResult = {[unowned self] result in
       switch result {
-        case let .failure(error):
-          self.error.value = error
-        case let .success(user):
-          self.user.value = user
+      case let .failure(error):
+        self.error.value = error
+      case let .success(user):
+        self.user.value = user
       }
     }
 
@@ -90,15 +90,15 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
 
   func usersListRequested(by type: UsersListType) {
     let usersListHandler: UsersResult = {[unowned self] result in
-      switch result{
-        case let .failure(error):
-          self.error.value = error
-        case let .success(users):
-          followersOfFollowsListUsers?(users)
+      switch result {
+      case let .failure(error):
+        self.error.value = error
+      case let .success(users):
+        followersOfFollowsListUsers?(users)
       }
     }
     if type == .followers {
-      provider.usersFollowingUser(by: user.value.id, handler:usersListHandler )
+      provider.usersFollowingUser(by: user.value.id, handler: usersListHandler )
     } else if type == .followings {
       provider.usersFollowedByUser(by: user.value.id, handler: usersListHandler)
     }

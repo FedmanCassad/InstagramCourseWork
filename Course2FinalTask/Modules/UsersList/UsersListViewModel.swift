@@ -11,7 +11,7 @@ protocol IUsersListViewModel {
 
 final class UsersListViewModel: IUsersListViewModel {
 
-  //MARK: - Props
+  // MARK: - Props
   var users: [User]
   var error: Dynamic<ErrorHandlingDomain?>
 
@@ -19,14 +19,14 @@ final class UsersListViewModel: IUsersListViewModel {
     users.count
   }
 
-  //MARK: - Init
+  // MARK: - Init
  init(with users: [User]) {
     self.users = users
     self.error = Dynamic(nil)
   }
 
-  //MARK: - Methods
-  //Methods used to construct cell's view model in tableView(_..., cellForRowAt indexPath: IndexPath)
+  // MARK: - Methods
+  // Methods used to construct cell's view model in tableView(_..., cellForRowAt indexPath: IndexPath)
   func getCellViewModel(atIndexPath indexPath: IndexPath) -> IUsersListCellViewModel {
     return UsersListCellViewModel(with: users[indexPath.row])
   }

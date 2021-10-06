@@ -18,6 +18,6 @@ typealias EmptyResult = (Result<Void, ErrorHandlingDomain>) -> Void
 typealias ImageCachingClosure = (Result<RetrieveImageResult, KingfisherError>) -> Void
 
 protocol ImageDataSavingAgent {
-  func saveAvatarData(data: Data) -> Void
-  func savePostImageData(data: Data) -> Void
+  func saveAvatarData(data: Data)
+  func savePostImageData(data: Data)
 }

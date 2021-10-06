@@ -22,15 +22,13 @@ protocol IFeedCellViewModel: AnyObject, ImageDataSavingAgent {
   var eventHandler: IFeedCellEventHandler? { get set }
   var post: Post { get set }
   var error: Dynamic<ErrorHandlingDomain>? { get set }
-  func likeTapped() -> Void
-  func authorTapped() -> Void
+  func likeTapped()
+  func authorTapped()
   var postImageData: Data? { get }
   var avatarImageData: Data? { get }
-  func likesCountTapped() -> Void
+  func likesCountTapped()
   init(with post: Post)
 }
-
-
 
 final class FeedCellViewModel: IFeedCellViewModel {
 
@@ -42,57 +40,67 @@ final class FeedCellViewModel: IFeedCellViewModel {
   init (with post: Post) {
     if dataProvider.location == .LANIP {
       let tempPost = post
-      //MARK: !!! TEMPORARY FOR REAL DEVICE TESTING !!!
-      tempPost.image = URL(string: tempPost.image.absoluteString.replacingOccurrences(of: "http://localhost:8080", with: dataProvider.location.serverURL.absoluteString))!
-      tempPost.authorAvatar = URL(string: tempPost.authorAvatar.absoluteString.replacingOccurrences(of: "http://localhost:8080", with: dataProvider.location.serverURL.absoluteString))!
+      // MARK: - !!! TEMPORARY FOR REAL DEVICE TESTING !!!
+      tempPost.image = URL(
+        string: tempPost.image.absoluteString.replacingOccurrences(
+          of: "http://localhost:8080",
+          with: dataProvider.location.serverURL.absoluteString
+        )
+      )!
+      tempPost.authorAvatar = URL(
+        string: tempPost.authorAvatar.absoluteString.replacingOccurrences(
+          of: "http://localhost:8080",
+          with: dataProvider.location.serverURL.absoluteString
+        )
+      )!
       self.post = tempPost
     } else {
       self.post = post
     }
     setupSavingBinding()
   }
-  
+
   var id: String {
     post.id
   }
-  
+
   var postDescription: String {
     post.postDescription
   }
-  
+
   var author: String {
     post.author
   }
-  
+
   var authorUsername: String {
     post.authorUsername
   }
-  
+
   var authorAvatarURL: URL {
     post.authorAvatar
   }
-  
+
   var imageURL: URL {
     post.image
   }
-  
+
   var postImageData: Data? {
     post.imageData
   }
-  
+
   var avatarImageData: Data? {
     post.avatarImageData
   }
-  
+
   var createdTime: String {
     let formatter = DateFormatter()
     return formatter.convertToString(date: post.createdTime)
   }
-  
+
   var currentUserLikesThisPost: Bool {
     post.currentUserLikesThisPost
   }
-  
+
   var likedByCount: String {
     "Likes: " + String(post.likedByCount)
   }
@@ -100,32 +108,31 @@ final class FeedCellViewModel: IFeedCellViewModel {
   func likesCountTapped() {
     dataProvider.usersLikedSpecificPost(by: id) { [unowned self] result in
       switch result {
-        case .failure(let error):
+      case .failure(let error):
           eventHandler?.passAlert(error: error)
-        case .success(let users):
+      case .success(let users):
           eventHandler?.likesCountTapped(andReceived: users)
       }
     }
   }
-  
+
   func authorTapped() {
     dataProvider.getUser(by: post.author) {[unowned self] result in
       switch result {
-        case let .failure(error):
+      case let .failure(error):
           eventHandler?.passAlert(error: error)
-        case let .success(user):
+      case let .success(user):
           eventHandler?.authorTapped(by: user)
       }
     }
   }
-
-  
+  // swiftlint:disable force_cast
   private func setupSavingBinding() {
     post.performSaving = {[weak self] post in
       self?.dataProvider.savePost(post: post as! Post)
     }
   }
-  
+
   func likeTapped() {
     _ = currentUserLikesThisPost
       ? eventHandler?.unlikePost(by: self.id, animatingCompletion: likesDataUpdatedAnimation)

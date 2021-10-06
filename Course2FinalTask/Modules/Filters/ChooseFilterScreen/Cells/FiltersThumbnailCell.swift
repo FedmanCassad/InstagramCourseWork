@@ -1,12 +1,12 @@
 import UIKit
 
-protocol FiltersThumbnailCellDelegate {
-  func filterChosen(image: UIImage) -> Void
+protocol FiltersThumbnailCellDelegate: AnyObject {
+  func filterChosen(image: UIImage)
 }
-final class FiltersThumbnailCell: UICollectionViewCell {
 
+final class FiltersThumbnailCell: UICollectionViewCell {
   static let identifier = String(describing: self)
-  var delegate: FiltersThumbnailCellDelegate?
+  weak var delegate: FiltersThumbnailCellDelegate?
 
   private lazy var thumbnailImage: UIImageView = {
     let imageView = UIImageView()
@@ -26,13 +26,13 @@ final class FiltersThumbnailCell: UICollectionViewCell {
   }()
 
   private lazy var selectFilterGestureRecognizer: UITapGestureRecognizer = {
-    let gr = UITapGestureRecognizer(target: self, action: #selector(applyFilter))
-    return gr
+    let selectFilterRecognizer = UITapGestureRecognizer(target: self, action: #selector(applyFilter))
+    return selectFilterRecognizer
   }()
 
   var viewModel: IFilterThumbnailCellViewModel?
 
-  //Initialization
+  // Initialization
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -43,7 +43,6 @@ final class FiltersThumbnailCell: UICollectionViewCell {
     contentView.addSubview(filterLabel)
     activateConstraints()
   }
-
 
   private func activateConstraints() {
     NSLayoutConstraint.activate([
@@ -78,9 +77,7 @@ final class FiltersThumbnailCell: UICollectionViewCell {
 
   @objc func applyFilter() {
     guard let viewModel = viewModel,
-          let image = viewModel.image.value else {
-      return
-    }
+          let image = viewModel.image.value else { return }
     delegate?.filterChosen(image: image)
   }
 }

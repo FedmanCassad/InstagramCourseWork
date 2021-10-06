@@ -1,6 +1,5 @@
 import UIKit
 
-
 final class ProfilePhotosCell: UICollectionViewCell {
 
 	static let identifier = String(describing: self)
@@ -12,7 +11,7 @@ final class ProfilePhotosCell: UICollectionViewCell {
 		return imgView
 	}()
 
-	func configure(with url: URL){
+	func configure(with url: URL) {
     var tempUrl = url
     if NetworkEngine.shared.location == .LANIP {
 		tempUrl = URL(string: url.absoluteString.replacingOccurrences(of: "localhost", with: "172.16.9.185"))!

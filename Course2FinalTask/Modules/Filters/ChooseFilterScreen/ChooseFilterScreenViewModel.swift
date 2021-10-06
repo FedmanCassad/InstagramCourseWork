@@ -9,7 +9,7 @@ protocol IChooseFilterScreenViewModel {
 final class ChooseFilterScreenViewModel: NSObject, IChooseFilterScreenViewModel {
   var applyFilteredImage: ((UIImage) -> Void)?
   var mainImage: Dynamic<UIImage>
-  
+
   let effectsKeys: [String] = [
     FilterKeys.CISepiaTone,
     FilterKeys.CIColorInvert,
@@ -19,7 +19,7 @@ final class ChooseFilterScreenViewModel: NSObject, IChooseFilterScreenViewModel 
     FilterKeys.CITwirlDistortion
   ]
 
-  var filterKeys: [String] = [String]()
+  var filterKeys: [String] = []
   let processingQueue = OperationQueue()
   init(image: UIImage) {
     self.mainImage = Dynamic(image)
@@ -32,11 +32,14 @@ extension ChooseFilterScreenViewModel: UICollectionViewDataSource {
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let viewModel = FilterThumbnailCellViewModel(filterKey: effectsKeys[indexPath.item],
-                                                 queue: processingQueue,
-                                                 image: mainImage.value)
-    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FiltersThumbnailCell.identifier,
-                                                        for: indexPath) as? FiltersThumbnailCell else {
+    let viewModel = FilterThumbnailCellViewModel(
+      filterKey: effectsKeys[indexPath.item],
+      queue: processingQueue,
+      image: mainImage.value)
+    guard let cell = collectionView.dequeueReusableCell(
+      withReuseIdentifier: FiltersThumbnailCell.identifier,
+      for: indexPath
+    ) as? FiltersThumbnailCell else {
       return UICollectionViewCell()
     }
     cell.configure(viewModel: viewModel, delegate: self)

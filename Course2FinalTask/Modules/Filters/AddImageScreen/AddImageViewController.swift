@@ -8,7 +8,7 @@ final class AddImageViewController: UIViewController {
     let layout = UICollectionViewFlowLayout()
     let imagesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     imagesCollectionView.backgroundColor = .white
-    imagesCollectionView.dataSource = viewModel as! AddImageScreenViewModel
+    imagesCollectionView.dataSource = viewModel as? AddImageScreenViewModel
     imagesCollectionView.delegate = self
     imagesCollectionView.isScrollEnabled = true
     imagesCollectionView.toAutoLayout()
@@ -22,7 +22,7 @@ final class AddImageViewController: UIViewController {
     view.addSubview(imagesCollectionView)
     setupBindings()
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -44,7 +44,7 @@ final class AddImageViewController: UIViewController {
       imagesCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
     ])
   }
-  
+
   private func setupBindings() {
     viewModel.imageHasBeenSelected = {[weak self] image in
       let chooseFilterVC = ChooseFilterViewController(ChooseFilterScreenViewModel(image: image))
@@ -59,16 +59,28 @@ final class AddImageViewController: UIViewController {
 
 extension AddImageViewController: UICollectionViewDelegateFlowLayout {
 
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
     let sideLength = view.frame.width / 3
     return CGSize(width: sideLength, height: sideLength)
   }
 
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    minimumInteritemSpacingForSectionAt section: Int
+  ) -> CGFloat {
     0
   }
 
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    minimumLineSpacingForSectionAt section: Int
+  ) -> CGFloat {
     0
   }
 }

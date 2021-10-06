@@ -49,7 +49,7 @@ class SharePostViewController: UIViewController {
     super.viewDidLoad()
     overrideUserInterfaceStyle = .light
     view.backgroundColor = .white
-    [postImage, descriptionLabel, descriptionTextField].forEach{
+    [postImage, descriptionLabel, descriptionTextField].forEach {
       view.addSubview($0)
     }
     setupBindings()
@@ -68,9 +68,9 @@ class SharePostViewController: UIViewController {
         postImage.heightAnchor.constraint(equalTo: postImage.widthAnchor),
         descriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
         descriptionLabel.topAnchor.constraint(equalTo: postImage.bottomAnchor, constant: 32),
-        descriptionTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 16),
+        descriptionTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
         descriptionTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-        descriptionTextField.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
+        descriptionTextField.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8)
       ]
     )
   }
@@ -78,8 +78,7 @@ class SharePostViewController: UIViewController {
   private func setupBindings() {
     viewModel.sharingSuccessful = {[weak self] in
       guard let self = self,
-            let tabBar = self.tabBarController as? InstaTabBarController else
-      {
+            let tabBar = self.tabBarController as? InstaTabBarController else {
         return
 
       }
@@ -100,6 +99,5 @@ class SharePostViewController: UIViewController {
   @objc func textChanged(sender: UITextField) {
     viewModel.description = sender.text ?? ""
   }
-
 
 }

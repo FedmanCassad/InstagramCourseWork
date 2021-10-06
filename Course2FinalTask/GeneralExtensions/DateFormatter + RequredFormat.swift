@@ -9,7 +9,7 @@
 import Foundation
 
 extension DateFormatter {
-  //MARK: - Форматтер для преобразования даты приходящей с сервера в строку согласно задания
+  // MARK: - Форматтер для преобразования даты приходящей с сервера в строку согласно задания
   func convertToString(date: Date) -> String {
     self.dateStyle = .medium
     self.timeStyle = .medium

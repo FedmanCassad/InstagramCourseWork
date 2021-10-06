@@ -53,8 +53,8 @@ enum URLBuilder {
       appendingPath = "/posts/like"
     case .unlikePost:
       appendingPath = "/posts/unlike"
-      case .checkToken:
-        appendingPath = "/checkToken"
+    case .checkToken:
+      appendingPath = "/checkToken"
     case .signOut:
       appendingPath = "/signout"
     case let .getUser(userID: userID):

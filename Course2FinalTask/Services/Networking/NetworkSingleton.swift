@@ -132,7 +132,7 @@ class NetworkEngine: INetworkEngine {
   var currentUser: User?
   var tempUser: User?
   var token: String?
-  let session: URLSession =  URLSession(configuration: .default)
+  let session: URLSession = URLSession(configuration: .default)
   private(set) var location: HostLocation = .localhost
 
   /// Общий и единственный объект класса
@@ -142,8 +142,8 @@ class NetworkEngine: INetworkEngine {
 
   private init() {}
 
-  //MARK: - Just for fun
-  private func runInMainQueue(block: @escaping () -> ()) {
+  // MARK: - Just for fun
+  private func runInMainQueue(block: @escaping () -> Void) {
     DispatchQueue.main.async {
       block()
     }
@@ -153,7 +153,7 @@ class NetworkEngine: INetworkEngine {
     self.token = token
   }
 
-  private func parseData<T: Decodable>(data: Data)  -> T? {
+  private func parseData<T: Decodable>(data: Data) -> T? {
     let decoder = JSONDecoder()
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
@@ -164,7 +164,7 @@ class NetworkEngine: INetworkEngine {
   private func performRequest<T: Decodable>(request: URLRequest,
                                             completion: @escaping (Result<T, ErrorHandlingDomain>) -> Void) {
     print(request.url!.absoluteString)
-    session.dataTask(with: request) {(data, response, error) in
+    session.dataTask(with: request) {data, _, error in
       if let error = error {
         completion(.failure(.networkError(error: error)))
       }
@@ -173,60 +173,66 @@ class NetworkEngine: INetworkEngine {
         completion(value != nil ?
                     .success(value!) :
                     .failure(.parsingFailed))
+        LockingView.unlock()
       }
     }.resume()
   }
 
-  //MARK: - Loading feed
+  // MARK: - Loading feed
   func getFeed(handler: @escaping PostsResult) {
     let request = NetworkRequestBuilder.feed.getRequest(for: location, usingURL: .feed)
     performRequest(request: request, completion: handler)
   }
 
-  //MARK: - Loading model of current user
-  func getCurrentUser(handler: @escaping (Result<User, ErrorHandlingDomain>) -> ()) {
+  // MARK: - Loading model of current user
+  func getCurrentUser(handler: @escaping (Result<User, ErrorHandlingDomain>) -> Void) {
     let request = NetworkRequestBuilder.getCurrentUser.getRequest(for: location, usingURL: .getCurrentUser)
     performRequest(request: request, completion: handler)
   }
 
-  //MARK: - Find posts function
-  func findPosts(by userID: User.ID, handler: @escaping (Result<[Post], ErrorHandlingDomain>) -> ()) {
+  // MARK: - Find posts function
+  func findPosts(by userID: User.ID, handler: @escaping (Result<[Post], ErrorHandlingDomain>) -> Void) {
     let request = NetworkRequestBuilder.findPosts.getRequest(for: location, usingURL: .findPosts(userID: userID))
     performRequest(request: request, completion: handler)
   }
 
-  //MARK: - Find followers
-  func usersFollowingUser(by userID: User.ID, handler: @escaping (Result<[User], ErrorHandlingDomain>) -> ()) {
-    let request = NetworkRequestBuilder.userFollowings.getRequest(for: location, usingURL: .userFollowers(userID: userID))
+  // MARK: - Find followers
+  func usersFollowingUser(by userID: User.ID, handler: @escaping (Result<[User], ErrorHandlingDomain>) -> Void) {
+    let request = NetworkRequestBuilder
+      .userFollowings
+      .getRequest(
+        for: location,
+        usingURL: .userFollowers(userID: userID)
+      )
     performRequest(request: request, completion: handler)
   }
 
-  //MARK: - Find followings
-  func usersFollowedByUser(by userID: User.ID, handler: @escaping (Result<[User], ErrorHandlingDomain>) -> ()) {
+  // MARK: - Find followings
+  func usersFollowedByUser(by userID: User.ID, handler: @escaping (Result<[User], ErrorHandlingDomain>) -> Void) {
     let request = NetworkRequestBuilder
       .userFollowed
       .getRequest(for: location,
                   usingURL: .userFollowing(userID: userID))
     performRequest(request: request, completion: handler)
   }
-  //MARK: - Follow function
-  func follow(by userID: User.ID, handler: @escaping (Result<User, ErrorHandlingDomain>) -> ()) {
+  // MARK: - Follow function
+  func follow(by userID: User.ID, handler: @escaping (Result<User, ErrorHandlingDomain>) -> Void) {
     let request = NetworkRequestBuilder
       .follow(userID: UserEncodableRequest(userID: userID))
       .getRequest(for: location, usingURL: .follow)
     performRequest(request: request, completion: handler)
   }
 
-  //MARK: - Unfollow function
-  func unfollow(by userID: String, handler: @escaping (Result<User, ErrorHandlingDomain>) -> ()) {
+  // MARK: - Unfollow function
+  func unfollow(by userID: String, handler: @escaping (Result<User, ErrorHandlingDomain>) -> Void) {
     let request = NetworkRequestBuilder
       .unfollow(userID: UserEncodableRequest(userID: userID))
       .getRequest(for: location, usingURL: .unfollow)
     performRequest(request: request, completion: handler)
   }
 
-  //MARK: - Upload post
-  func uploadPost(image: Data?, description: String, handler: @escaping (Result<Post, ErrorHandlingDomain>) -> ()) {
+  // MARK: - Upload post
+  func uploadPost(image: Data?, description: String, handler: @escaping (Result<Post, ErrorHandlingDomain>) -> Void) {
     if let base64String = image?.base64EncodedString() {
       let request = NetworkRequestBuilder
         .uploadPost(post: PostUploadingRequest(image: base64String, description: description))
@@ -237,74 +243,75 @@ class NetworkEngine: INetworkEngine {
     }
   }
 
-  //MARK: - Get user by id
-  func getUser(by userID: User.ID, handler: @escaping (Result<User, ErrorHandlingDomain>) -> ()) {
+  // MARK: - Get user by id
+  func getUser(by userID: User.ID, handler: @escaping (Result<User, ErrorHandlingDomain>) -> Void) {
     let request = NetworkRequestBuilder.getUser.getRequest(for: location, usingURL: .getUser(userID: userID))
     performRequest(request: request, completion: handler)
   }
 
-  //MARK: - Get users liked specific post
-  func usersLikedSpecificPost(by postID: Post.ID, handler: @escaping (Result<[User], ErrorHandlingDomain>) -> ()) {
+  // MARK: - Get users liked specific post
+  func usersLikedSpecificPost(by postID: Post.ID, handler: @escaping (Result<[User], ErrorHandlingDomain>) -> Void) {
     let request = NetworkRequestBuilder
       .usersLikesSpecificPost
       .getRequest(for: location, usingURL: .usersLikesSpecificPost(postID: postID))
     performRequest(request: request, completion: handler)
   }
 
-  //MARK: - Like post
-  func likePost(by postID: Post.ID, handler: @escaping (Result<Post, ErrorHandlingDomain>) -> ()) {
+  // MARK: - Like post
+  func likePost(by postID: Post.ID, handler: @escaping (Result<Post, ErrorHandlingDomain>) -> Void) {
     let request = NetworkRequestBuilder
       .likePost(postID: PostEncodableRequest(postID: postID))
       .getRequest(for: location, usingURL: .likePost)
     performRequest(request: request, completion: handler)
   }
 
-  //MARK: - Unlike post
-  func unlikePost(by postID: Post.ID, handler: @escaping (Result<Post, ErrorHandlingDomain>) -> ()) {
+  // MARK: - Unlike post
+  func unlikePost(by postID: Post.ID, handler: @escaping (Result<Post, ErrorHandlingDomain>) -> Void) {
     let request = NetworkRequestBuilder
       .unlikePost(postID: PostEncodableRequest(postID: postID))
       .getRequest(for: location, usingURL: .unlikePost)
     performRequest(request: request, completion: handler)
   }
 
-  //MARK: - Logout func
+  // MARK: - Logout func
 
 }
 
-//MARK: - Login flow interface implementation
+// MARK: - Login flow interface implementation
 extension NetworkEngine: ILoginFlow {
-
 
   func checkToken(handler: @escaping EmptyResult) {
     let request = NetworkRequestBuilder
       .checkToken
       .getRequest(for: location, usingURL: .checkToken)
-    session.dataTask(with: request) {data, response, error in
-      if let _ = error {
+    session.dataTask(with: request) {_, response, error in
+      if error != nil {
         handler(.failure(.serverUnreachable))
       }
-      if let response  = response as? HTTPURLResponse {
+      if let response = response as? HTTPURLResponse {
         switch response.statusCode {
-          case 200:
-            handler(.success(()))
-          case 401:
-            handler(.failure(.requestError(errorCode: response)))
-          default:
-            handler(.failure(.serverUnreachable))
+        case 200:
+          handler(.success(()))
+        case 401:
+          handler(.failure(.requestError(errorCode: response)))
+        default:
+          handler(.failure(.serverUnreachable))
         }
       }
-
+      LockingView.unlock()
     }.resume()
   }
 
   func logOut(handler: @escaping EmptyResult) {
     let url = URLBuilder.signOut.getURL(mode: location)
-    session.dataTask(with: url) {(data, response, error) in
+    session.dataTask(with: url) {_, _, error in
       guard let error = error else {
         handler(.success(()))
+        LockingView.unlock()
         return
       }
       handler(.failure(.networkError(error: error)))
+      LockingView.unlock()
     }.resume()
   }
 

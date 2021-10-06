@@ -13,7 +13,7 @@ typealias FeedSnapshot = NSDiffableDataSourceSnapshot<Int, Post>
 protocol IFeedViewModel {
   var error: Dynamic<ErrorHandlingDomain?> { get }
   var updateCellViewModel: ((Int) -> Void)? { get set }
-  var authorTapped: ((_ profile: IProfileViewModel)->Void)? { get set }
+  var authorTapped: ((_ profile: IProfileViewModel) -> Void)? { get set }
   var moveToUsersList: (([User]) -> Void)? { get set }
   var likeTapped: (() -> Void)? { get set }
   var posts: [Post] { get set }
@@ -27,15 +27,14 @@ protocol IFeedViewModel {
 protocol IFeedCellEventHandler {
   func likePost(by postID: String, animatingCompletion: (() -> Void)?)
   func unlikePost(by postID: String, animatingCompletion:  (() -> Void)?)
-  func authorTapped(by user: User) -> Void
+  func authorTapped(by user: User)
   func likesCountTapped(andReceived users: [User])
   func passAlert(error: ErrorHandlingDomain)
 }
 
 final class FeedViewModel: IFeedViewModel {
 
-
-  //MARK: - Props
+  // MARK: - Props
   var error: Dynamic<ErrorHandlingDomain?> = Dynamic(nil)
   var authorTapped: ((IProfileViewModel) -> Void)?
   var moveToUsersList: (([User]) -> Void)?
@@ -56,24 +55,24 @@ final class FeedViewModel: IFeedViewModel {
     }
   }
 
-  var rowsCount: Int  {
+  var rowsCount: Int {
     posts.count
   }
 
-  //MARK: - Methods
+  // MARK: - Methods
   func requestFeedPosts() {
     dataProvider.getFeed {result in
       switch result {
-        case let .failure(error):
+      case let .failure(error):
           self.error.value = error
-        case let .success(feed):
+      case let .success(feed):
           self.posts = feed
       }
     }
   }
 
   func updateFeedPost(with post: Post) {
-    guard let index = posts.firstIndex (where: { $0.id == post.id }) else { return }
+    guard let index = posts.firstIndex(where: { $0.id == post.id }) else { return }
     posts[index] = post
     updateCellViewModel?(index)
   }
@@ -87,7 +86,7 @@ final class FeedViewModel: IFeedViewModel {
   }
 }
 
-//MARK: - Cell's delegate methods
+// MARK: - Cell's delegate methods
 extension FeedViewModel: IFeedCellEventHandler {
 
   func likesCountTapped(andReceived users: [User]) {
@@ -102,12 +101,12 @@ extension FeedViewModel: IFeedCellEventHandler {
   func unlikePost(by postID: String, animatingCompletion: (() -> Void)?) {
     dataProvider.unlikePost(by: postID) {result in
       switch result {
-        case .success(let post):
+      case .success(let post):
           self.updateFeedPost(with: post)
           DispatchQueue.main.async {
             animatingCompletion?()
           }
-        case .failure(let error):
+      case .failure(let error):
           self.error.value = error
       }
     }
@@ -116,16 +115,16 @@ extension FeedViewModel: IFeedCellEventHandler {
   func passAlert(error: ErrorHandlingDomain) {
     self.error.value = error
   }
-  
+
   func likePost(by postID: Post.ID, animatingCompletion: (() -> Void)?) {
     dataProvider.likePost(by: postID) {result in
       switch result {
-        case .success(let post):
+      case .success(let post):
           self.updateFeedPost(with: post)
           DispatchQueue.main.async {
             animatingCompletion?()
           }
-        case .failure(let error):
+      case .failure(let error):
           self.error.value = error
       }
     }

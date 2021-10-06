@@ -26,7 +26,8 @@ class User: Decodable, Identifiable, Hashable {
   var performSaving: ((Savable) -> Void)?
 
   enum CodingKeys: String, CodingKey {
-    case id,username, fullName, avatar,currentUserFollowsThisUser , currentUserIsFollowedByThisUser, followsCount, followedByCount
+    case id, username, fullName, avatar, currentUserFollowsThisUser,
+	currentUserIsFollowedByThisUser, followsCount, followedByCount
   }
 
   init?(from coreDataModel: CDUser) {
@@ -59,5 +60,4 @@ extension User: Savable {
   var readyToSave: Bool {
     avatarData != nil
   }
-
 }

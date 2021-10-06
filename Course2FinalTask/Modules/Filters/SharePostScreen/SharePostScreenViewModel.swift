@@ -5,11 +5,10 @@ protocol ISharePostScreenViewModel: AnyObject {
   var description: String { get set }
   var imageToShare: UIImage { get }
   var sharingSuccessful: (() -> Void)? { get set }
-  func shareButtonTapped () -> Void
+  func shareButtonTapped ()
 }
 
 final class SharePostScreenViewModel: ISharePostScreenViewModel {
-
   let provider: IDataProviderFacade = DataProviderFacade.shared
   var sharingSuccessful: (() -> Void)?
   var error: Dynamic<ErrorHandlingDomain?>
@@ -24,10 +23,10 @@ final class SharePostScreenViewModel: ISharePostScreenViewModel {
   func shareButtonTapped() {
     provider.uploadPost(image: imageToShare.pngData(), description: description) {[unowned self] result in
       switch result {
-        case .success(_):
-          sharingSuccessful?()
-        case let .failure(error):
-          self.error.value = error
+      case .success:
+        sharingSuccessful?()
+      case let .failure(error):
+        self.error.value = error
       }
     }
   }

@@ -14,30 +14,35 @@ protocol ILoginViewModel: AnyObject {
 
   /// При любом изменении свойства .text поля для ввода логина, значение поля сохраняется в loginText.
   var loginText: String? { get set }
+
+  /// При любом изменении свойства .text поля для ввода пароля, значение поля сохраняется в passwordText.
   var passwordText: String? { get set }
-  var needFillTextFieldsFromSafeStorage: ((String, String)->Void)? { get set }
+
+  /// Замыкание куда передается логин и пароль сохраненные в KeyChain для заполнения соответствующих полей
+  var needFillTextFieldsFromSafeStorage: ((String, String) -> Void)? { get set }
+
+  /// Инициирует действия со стороны viewController (загрузка основных контроллеров и последующее их отображение)
   var loginSuccessful: (() -> Void)? { get set }
-  var isTokenValid: Bool { get set }
-  func signInButtonTapped() -> Void
-  func checkSavedCredentials() -> Void
-  func alertOKButtonTapped() -> Void
+
+  func signInButtonTapped()
+  func checkSavedCredentials()
+  func alertOKButtonTapped()
 }
 
 final class LoginViewModel: ILoginViewModel {
 
-  //MARK: - Props here
+  // MARK: - Props here
   var error: Dynamic<ErrorHandlingDomain?> = Dynamic(nil)
   private let dataProvider: ILoginFlow = DataProviderFacade.shared
   private let securityService: BiometryIdentificationService = BiometryIdentificationService()
   var loginText: String?
   var passwordText: String?
-  var isTokenValid: Bool = false
   var loginSuccessful: (() -> Void)?
   var needFillTextFieldsFromSafeStorage: ((String, String) -> Void)?
 
   var authFieldsNotEmpty: Bool {
     guard let login = loginText,
-          let password = passwordText else { return false}
+          let password = passwordText else { return false }
     return login.isEmpty || password.isEmpty ? false : true
   }
 
@@ -45,7 +50,7 @@ final class LoginViewModel: ILoginViewModel {
     return authFieldsNotEmpty ? 1 : 0.3
   }
 
-//MARK: - This method is for handling completion for alerts
+  // MARK: - This method is for handling completion for alerts
   func alertOKButtonTapped() {
     performLoginFlow()
   }
@@ -54,7 +59,7 @@ final class LoginViewModel: ILoginViewModel {
     KeychainService.getToken() != nil
   }
 
-  //MARK: - Methods here
+  // MARK: - Methods here
   private func checkToken() {
     guard checkSavedToken() else {
       error.value = .noTokenStored
@@ -62,15 +67,15 @@ final class LoginViewModel: ILoginViewModel {
     }
     dataProvider.checkToken {[unowned self] result in
       switch result {
-        case .success:
-          performLoginFlow()
-        case .failure(let error):
-          if error == .tokenExpired {
-            self.error.value = error
-          } else {
-            dataProvider.setOffline()
-            self.error.value = error
-          }
+      case .success:
+        performLoginFlow()
+      case .failure(let error):
+        if error == .tokenExpired {
+          self.error.value = error
+        } else {
+          dataProvider.setOffline()
+          self.error.value = error
+        }
       }
     }
   }
@@ -81,20 +86,20 @@ final class LoginViewModel: ILoginViewModel {
       let signInModel = SignInModel(login: login, password: password)
       dataProvider.loginToServer(signInModel: signInModel) {[unowned self] result in
         switch result {
-          case let .success(token):
-            KeychainService.saveToken(token: token.token)
-            KeychainService.saveLogin(login: login)
-            KeychainService.savePassword(password: password)
-            dataProvider.getCurrentUser {[weak self] result in
-              switch result {
-                case .success(_):
-                  self?.loginSuccessful?()
-                case .failure(let error):
-                  self?.error.value = error
-              }
+        case let .success(token):
+          KeychainService.saveToken(token: token.token)
+          KeychainService.saveLogin(login: login)
+          KeychainService.savePassword(password: password)
+          dataProvider.getCurrentUser {[weak self] result in
+            switch result {
+            case .success:
+              self?.loginSuccessful?()
+            case .failure(let error):
+              self?.error.value = error
             }
-          case  .failure(let error):
-            self.error.value = error
+          }
+        case  .failure(let error):
+          self.error.value = error
         }
       }
     }
@@ -115,6 +120,6 @@ final class LoginViewModel: ILoginViewModel {
   }
 
   func signInButtonTapped() {
-performLoginFlow()
+    performLoginFlow()
   }
 }

@@ -19,7 +19,7 @@ final class CoreDataService {
   }
 
   func setupStack() {
-    container.loadPersistentStores {[weak self] description, error in
+    container.loadPersistentStores {[weak self] _, error in
       if let error = error {
         print(error.localizedDescription)
       } else {
@@ -59,13 +59,17 @@ final class CoreDataService {
     save()
   }
 
-  func fetchData<T: NSManagedObject> (for entity: T.Type, with predicate: NSCompoundPredicate? = nil, with sortDescriptors: [NSSortDescriptor]? = nil) -> [T]? {
+  func fetchData<T: NSManagedObject> (
+    for entity: T.Type,
+    with predicate: NSCompoundPredicate? = nil,
+    with sortDescriptors: [NSSortDescriptor]? = nil
+  ) -> [T]? {
     let request: NSFetchRequest<T>
     var fetchedResult = [T]()
     request = NSFetchRequest(entityName: String(describing: entity))
     request.predicate = predicate
     request.sortDescriptors = sortDescriptors
-    do  {
+    do {
       fetchedResult = try taskContext.fetch(request)
     } catch {
       debugPrint("Error occurred: \(error.localizedDescription)")

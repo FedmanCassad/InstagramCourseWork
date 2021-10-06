@@ -1,11 +1,10 @@
 import UIKit
 
-protocol ChooseImageCellDelegate {
+protocol ChooseImageCellDelegate: AnyObject {
   func imageSelected(image: UIImage)
 }
 
 final class ChooseImageCell: UICollectionViewCell {
-
   private lazy var galleryImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.toAutoLayout()
@@ -19,9 +18,9 @@ final class ChooseImageCell: UICollectionViewCell {
     return tapRecognizer
   }()
 
-  var delegate: ChooseImageCellDelegate?
+  weak var delegate: ChooseImageCellDelegate?
   static let identifier = String(describing: self)
-  
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     contentView.addSubview(galleryImageView)

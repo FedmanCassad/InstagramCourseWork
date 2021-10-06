@@ -1,12 +1,12 @@
 import UIKit
 //
-//enum DestinationMeaning {
+// enum DestinationMeaning {
 //  case followers
 //  case follows
-//}
+// }
 //
 public enum ErrorHandlingDomain: Error, Equatable {
-  
+
   public static func == (lhs: ErrorHandlingDomain, rhs: ErrorHandlingDomain) -> Bool {
     lhs.localizedDescription == rhs.localizedDescription
   }
@@ -42,18 +42,18 @@ public enum ErrorHandlingDomain: Error, Equatable {
       return ("Unidentified error", "Something goes wrong")
     case .imageDataConvertingError:
       return("Image processing error", "Can't convert image data to base64String")
-      case .serverUnreachable:
-        return("The server is unreachable at this moment", "The application switched to offline mode")
+    case .serverUnreachable:
+      return("The server is unreachable at this moment", "The application switched to offline mode")
     case .networkError(error: let error):
       return ("Network error", error.localizedDescription)
-      case .noUserStored:
-        return("No offline data", "The requested user wasn't cached at offline store")
-      case .noPostsStored:
-        return ("No offline data", "The requested post or posts not saved at offline store")
-      case .unavailableInOfflineMode:
-        return ("Offline mode", "This function is unavailable due to offline mode" )
-      case .noTokenStored:
-        return ("Here is no stored accounts", "Please sign in")
+    case .noUserStored:
+      return("No offline data", "The requested user wasn't cached at offline store")
+    case .noPostsStored:
+      return ("No offline data", "The requested post or posts not saved at offline store")
+    case .unavailableInOfflineMode:
+      return ("Offline mode", "This function is unavailable due to offline mode" )
+    case .noTokenStored:
+      return ("Here is no stored accounts", "Please sign in")
     case .requestError(let errorCode):
       switch errorCode.statusCode {
       case 404:

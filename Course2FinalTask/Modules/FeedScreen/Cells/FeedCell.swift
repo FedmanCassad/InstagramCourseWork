@@ -1,20 +1,19 @@
-import UIKit
 import Kingfisher
-//
+import UIKit
 
 final class FeedCell: UITableViewCell {
-  
+
   public enum LikeColor {
     static let isLiked = UIColor.systemBlue
     static let notLiked = UIColor.systemGray
   }
-  
+
   static var identifier: String {
     String(describing: Self.self)
   }
   var viewModel: IFeedCellViewModel?
-  
-  //MARK: - Top footer (avatar, nickname, created time)
+
+  // MARK: - Top footer (avatar, nickname, created time)
   private lazy var avatarImageView: UIImageView = {
     let img = UIImageView()
     img.contentMode = .scaleAspectFit
@@ -23,7 +22,7 @@ final class FeedCell: UITableViewCell {
     img.toAutoLayout()
     return img
   }()
-  
+
   private lazy var userName: UILabel = {
     let label = UILabel()
     label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
@@ -32,7 +31,7 @@ final class FeedCell: UITableViewCell {
     label.isUserInteractionEnabled = true
     return label
   }()
-  
+
   private lazy var timeStamp: UILabel = {
     let label = UILabel()
     label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
@@ -40,8 +39,8 @@ final class FeedCell: UITableViewCell {
     label.numberOfLines = 1
     return label
   }()
-  
-  //MARK: - Post picture
+
+  // MARK: - Post picture
   private lazy var postImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.toAutoLayout()
@@ -50,8 +49,8 @@ final class FeedCell: UITableViewCell {
     imageView.clipsToBounds = true
     return imageView
   }()
-  
-  //MARK: - Footer
+
+  // MARK: - Footer
   private lazy var likesDisplayButton: UIButton = {
     let button = UIButton(type: .system)
     button.toAutoLayout()
@@ -62,10 +61,10 @@ final class FeedCell: UITableViewCell {
     button.isUserInteractionEnabled = true
     return button
   }()
-  
+
   private lazy var likeButton: UIButton = {
     let button = UIButton(type: .custom)
-    let img = UIImage(named: "like")
+    let img = R.image.like()
     button.setImage(img, for: .normal)
     button.tintColor = .lightGray
     button.sizeToFit()
@@ -74,23 +73,23 @@ final class FeedCell: UITableViewCell {
     button.translatesAutoresizingMaskIntoConstraints = false
     return button
   }()
-  
+
   private lazy var commentLabel: UILabel = {
     let button = UILabel()
     button.numberOfLines = 1
     button.toAutoLayout()
     return button
   }()
-  
+
   private lazy var bigLike: UIImageView = {
-    let img = UIImage(named: "bigLike")
+    let img = R.image.bigLike()
     let imgView = UIImageView(image: img)
     imgView.tintColor = .white
     imgView.layer.opacity = 0
     imgView.toAutoLayout()
     return imgView
   }()
-  
+
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     [avatarImageView,
@@ -106,14 +105,14 @@ final class FeedCell: UITableViewCell {
       contentView.addSubview($0)
     }
     activateConstraints()
+    setupGestureRecognizers()
   }
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   func configure() {
-//    toAutoLayout()
     setupBindings()
     guard let viewModel = viewModel else { return }
     commentLabel.text = viewModel.postDescription
@@ -128,14 +127,14 @@ final class FeedCell: UITableViewCell {
                               options: [.transition(.fade(0.2))],
                               completionHandler: {[weak self] result in
                                 switch result {
-                                  case .failure(_):
+                                case .failure:
                                     guard let data = viewModel.postImageData else { return }
                                     self?.postImageView.image = UIImage(data: data)
                                     self?.layoutIfNeeded()
                                     return
-                                  case let .success(image):
-                                    guard self?.viewModel?.postImageData == nil else { return }
-                                    guard let data = image.image.pngData() else { return }
+                                case let .success(image):
+                                    guard self?.viewModel?.postImageData == nil,
+                                          let data = image.image.pngData() else { return }
                                     self?.viewModel?.savePostImageData(data: data)
                                 }
                               })
@@ -144,47 +143,46 @@ final class FeedCell: UITableViewCell {
                                 options: [.transition(.fade(0.2))],
                                 completionHandler: {[weak self] result in
                                   switch result {
-                                    case .failure(_):
+                                  case .failure:
                                       guard let data = viewModel.avatarImageData else { return }
                                       self?.avatarImageView.image = UIImage(data: data)
                                       self?.layoutIfNeeded()
                                       return
-                                    case let .success(image):
-                                      guard self?.viewModel?.avatarImageData == nil else { return }
-                                      guard let data = image.image.pngData() else { return }
+                                  case let .success(image):
+                                      guard self?.viewModel?.avatarImageData == nil,
+                                            let data = image.image.pngData() else { return }
                                       self?.viewModel?.saveAvatarData(data: data)
                                   }
                                 })
-    setupGestureRecognizers()
   }
-  
+
   override func layoutSubviews() {
     avatarImageView.clipsToBounds = true
-    avatarImageView.layer.cornerRadius = avatarImageView.frame.height/2
+    avatarImageView.layer.cornerRadius = avatarImageView.frame.height / 2
   }
-  
-  //MARK: - Tap recognizers setup
+
+  // MARK: - Tap recognizers setup
   private func setupGestureRecognizers() {
     // Recognizer for big like image animating
     let postImageGR = UITapGestureRecognizer(target: self, action: #selector(postImageTapped))
     postImageGR.numberOfTapsRequired = 2
     postImageView.addGestureRecognizer(postImageGR)
-    
-    //Recognizer for pushing profile controller after avatar image tapped
+
+    // Recognizer for pushing profile controller after avatar image tapped
     let authorAvatarTappedGR = UITapGestureRecognizer(target: self, action: #selector(authorTapped))
     let authorUsernameTappedGR = UITapGestureRecognizer(target: self, action: #selector(authorTapped))
 
     avatarImageView.addGestureRecognizer(authorAvatarTappedGR)
     userName.addGestureRecognizer(authorUsernameTappedGR)
   }
-  
+
   func cancelImagesLoading() {
     avatarImageView.kf.cancelDownloadTask()
     postImageView.kf.cancelDownloadTask()
   }
-  
-  //MARK: - Setup bindings
-  
+
+  // MARK: - Setup bindings
+
   private func setupBindings() {
     viewModel?.likesDataUpdatedAnimation = {[unowned self]  in
       guard let viewModel = viewModel else { return }
@@ -194,16 +192,16 @@ final class FeedCell: UITableViewCell {
       }
     }
   }
-  
-  // MARK: @objc actions for cell
+
+  // MARK: - @objc actions for cell
   @objc private func postImageTapped() {
     likeTapped()
   }
-  
+
   @objc private func authorTapped() {
     viewModel?.authorTapped()
   }
-  
+
   @objc private func likeTapped() {
     bigLike.appearingAnimated()
     viewModel?.likeTapped()
@@ -212,7 +210,7 @@ final class FeedCell: UITableViewCell {
   @objc private func likesCountTapped() {
     viewModel?.likesCountTapped()
   }
-  
+
   private func activateConstraints() {
     NSLayoutConstraint.activate([
       avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),

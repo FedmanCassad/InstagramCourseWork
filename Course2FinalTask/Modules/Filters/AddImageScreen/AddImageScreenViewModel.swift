@@ -3,7 +3,7 @@ import UIKit
 protocol IAddImageScreenViewModel: AnyObject {
   var library: [UIImage] { get set }
   var error: Dynamic<ErrorHandlingDomain?> { get }
-  var imageHasBeenSelected: ((UIImage)-> Void)? { get set }
+  var imageHasBeenSelected: ((UIImage) -> Void)? { get set }
 }
 
 final class AddImageScreenViewModel: NSObject, IAddImageScreenViewModel {
@@ -11,13 +11,13 @@ final class AddImageScreenViewModel: NSObject, IAddImageScreenViewModel {
 private let processingQueue = OperationQueue()
 
   lazy var library: [UIImage] = {
-    var images = Array<UIImage>()
+    var images: [UIImage] = []
     guard let filesCount = Bundle.main.urls(forResourcesWithExtension: "jpg", subdirectory: nil)?.count else {
       return [UIImage]()
     }
     for i in 1...filesCount {
       guard let path = Bundle.main.path(forResource: "new\(i)", ofType: "jpg"),
-            let image = UIImage(contentsOfFile: path) else { return [UIImage]()}
+            let image = UIImage(contentsOfFile: path) else { return [UIImage]() }
       images.append(image)
     }
     return images

@@ -4,13 +4,12 @@ protocol IUsersListCellViewModel: AnyObject {
   var user: Dynamic<User> { get set }
   var delegate: UsersListCellDelegate? { get set }
   init(with user: User)
-  func userCellSelected() -> Void
+  func userCellSelected()
 }
 
 class UsersListCellViewModel: IUsersListCellViewModel {
-
   var user: Dynamic<User>
-  var delegate: UsersListCellDelegate?
+  weak var delegate: UsersListCellDelegate?
 
   required init(with user: User) {
     self.user = Dynamic(user)
@@ -19,5 +18,4 @@ class UsersListCellViewModel: IUsersListCellViewModel {
   func userCellSelected() {
     delegate?.profileCellTapped(by: user.value)
   }
-
 }

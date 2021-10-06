@@ -1,13 +1,11 @@
 import CoreData
 
-
 protocol Savable {
   var readyToSave: Bool { get }
   var performSaving: ((Savable) -> Void)? { get set }
 }
 
 class Post: Decodable, Identifiable, Hashable {
-
   var id, postDescription, author, authorUsername: String
   var image, authorAvatar: URL
   var createdTime: Date
@@ -16,13 +14,13 @@ class Post: Decodable, Identifiable, Hashable {
   var imageData: Data? {
     didSet {
       if readyToSave {
-      performSaving?(self)
+        performSaving?(self)
       }
     }
   }
-  
+
   var avatarImageData: Data? {
-    didSet{
+    didSet {
       if readyToSave {
         performSaving?(self)
       }
@@ -30,14 +28,22 @@ class Post: Decodable, Identifiable, Hashable {
   }
 
   var performSaving: ((Savable) -> Void)?
-
   enum CodingKeys: String, CodingKey {
     case postDescription = "description"
-    case id,createdTime, author, authorUsername, image, authorAvatar, currentUserLikesThisPost, likedByCount, imageData, avatarImageData
+    case
+      id,
+      createdTime,
+      author,
+      authorUsername,
+      image,
+      authorAvatar,
+      currentUserLikesThisPost,
+      likedByCount,
+      imageData,
+      avatarImageData
   }
 
   init?(from coreDataModel: CDPost) {
-
     guard
       let id = coreDataModel.id,
       let postDescription = coreDataModel.postDescription,
@@ -48,8 +54,8 @@ class Post: Decodable, Identifiable, Hashable {
       let createdTime = coreDataModel.createdTime,
       let imageData = coreDataModel.imagePNGData,
       let avatarImageData = coreDataModel.avatarPNGData
-    else { return nil}
-    
+    else { return nil }
+
     self.id = id
     self.postDescription = postDescription
     self.author = author
@@ -71,7 +77,6 @@ class Post: Decodable, Identifiable, Hashable {
     hasher.combine(id)
     hasher.combine(author)
   }
-
 }
 
 struct PostEncodableRequest: Encodable {
@@ -83,9 +88,7 @@ struct PostUploadingRequest: Encodable {
 }
 
 extension Post: Savable {
-
   var readyToSave: Bool {
-  imageData != nil && avatarImageData != nil
+    imageData != nil && avatarImageData != nil
   }
-
 }

@@ -1,11 +1,3 @@
-//
-//  PersistentDataProvider.swift
-//  Course2FinalTask
-//
-//  Created by Vladimir Banushkin on 24.09.2021.
-//  Copyright © 2021 e-Legion. All rights reserved.
-//
-
 import Foundation
 
 protocol IPersistentDataProvider {
@@ -16,7 +8,7 @@ protocol IPersistentDataProvider {
   ///   Вызывается после выполнения запроса.
   func getCurrentUserFromPersistentStore() -> CDUser?
 
-  ///Сохраняет userID текущего пользователя
+  /// Сохраняет userID текущего пользователя
   func saveCurrentUserID(with userID: User.ID)
 
   /// Сохранение текущего состояния контекста
@@ -28,16 +20,12 @@ protocol IPersistentDataProvider {
   /// Получаем юзера по ID
   func getSpecificUser(by id: User.ID) -> User?
 
-  ///Получаем id сохраненного текущего юзера.
+  /// Получаем id сохраненного текущего юзера.
   func getCurrentUserID() -> String?
 
-  ///Получать конкретные посты
+  /// Получать конкретные посты
   /// - Parameter keys: словарь ключей по которым будут запрошены посты. (обычно по userID(author))
-  func getSpecificPostsFromPersistentStore(by keys:[String: Any]) -> [CDPost]
-
-  ///Получить все посты за авторством конкретного юзера.
-  /// - Parameter userID: ID юзера посты которого ищем.
-  func getUsersPosts(by userID: User.ID) -> [Post]
+  func getSpecificPostsFromPersistentStore(by keys: [String: Any]) -> [CDPost]
 
   /// Сохраняем все посты которые есть
   /// - Parameter posts: массив наших обычных Codable постов.
@@ -56,7 +44,10 @@ protocol IPersistentDataProvider {
 final class PersistentDataProvider: IPersistentDataProvider {
 
   func getCurrentUserID() -> String? {
-    guard let loggedUser = provider.fetchData(for: LoggedUser.self)?.first else { return nil}
+    defer {
+      LockingView.unlock()
+    }
+    guard let loggedUser = provider.fetchData(for: LoggedUser.self)?.first else { return nil }
     return loggedUser.id
   }
 
@@ -66,8 +57,11 @@ final class PersistentDataProvider: IPersistentDataProvider {
   private init() {}
 
   func getCurrentUserFromPersistentStore() -> CDUser? {
-    guard let id = getCurrentUserID() else { return nil}
-    let predicates = SearchPredicateConstructor.getPredicates(by: ["id" : id])
+    defer {
+      LockingView.unlock()
+    }
+    guard let id = getCurrentUserID() else { return nil }
+    let predicates = SearchPredicateConstructor.getPredicates(by: ["id": id])
     let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
     guard let cdUser = provider.fetchData(for: CDUser.self, with: compoundPredicate)?.first
     else { return nil }
@@ -75,12 +69,18 @@ final class PersistentDataProvider: IPersistentDataProvider {
   }
 
   func saveCurrentUserID(with userID: User.ID) {
+    defer {
+      LockingView.unlock()
+    }
     let object: LoggedUser = provider.createObject()
     object.id = userID
     provider.save()
   }
 
   func saveUserToPersistentStore(user: User) {
+    defer {
+      LockingView.unlock()
+    }
     let object: CDUser = provider.createObject()
     object.prepareFromCodableUser(user: user)
     provider.save()
@@ -88,33 +88,40 @@ final class PersistentDataProvider: IPersistentDataProvider {
   }
 
   func getFeedFromPersistentStore() -> [Post] {
+    defer {
+      LockingView.unlock()
+    }
     let sortDescriptor = NSSortDescriptor(key: "createdTime", ascending: false)
     guard let posts = provider.fetchData(for: CDPost.self, with: nil, with: [sortDescriptor]) else {
       return [Post]()
     }
-    return posts.compactMap { Post(from: $0)}
+    return posts.compactMap { Post(from: $0) }
   }
 
-  func getSpecificPostsFromPersistentStore(by keys: [String : Any]) -> [CDPost] {
+  func getSpecificPostsFromPersistentStore(by keys: [String: Any]) -> [CDPost] {
+    defer {
+      LockingView.unlock()
+    }
     let predicate = SearchPredicateConstructor.getPredicates(by: keys)
     let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicate)
-    guard let posts = provider.fetchData(for: CDPost.self,with: compoundPredicate) else { return [CDPost]()}
+    guard let posts = provider.fetchData(for: CDPost.self, with: compoundPredicate) else { return [CDPost]() }
     return posts
   }
 
-  func getUsersPosts(by userID: User.ID) -> [Post] {
-    [Post]()
-  }
-
   func getSpecificUser(by id: User.ID) -> User? {
+    defer {
+      LockingView.unlock()
+    }
     let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates:
                                                   SearchPredicateConstructor.getUserPredicate(by: id))
-    guard let user = provider.fetchData(for: CDUser.self,with: compoundPredicate)?.first else { return nil }
+    guard let user = provider.fetchData(for: CDUser.self, with: compoundPredicate)?.first else { return nil }
     return User(from: user)
   }
 
-
   func saveFeed(posts: [Post]) {
+    defer {
+      LockingView.unlock()
+    }
     let _: [CDPost] = posts.map {
       let post: CDPost = provider.createObject()
       post.prepareFromCodablePost(post: $0)
@@ -124,17 +131,22 @@ final class PersistentDataProvider: IPersistentDataProvider {
   }
 
   func savePost(post: Post) {
+    defer {
+      LockingView.unlock()
+    }
     let cdPost: CDPost = provider.createObject()
     cdPost.prepareFromCodablePost(post: post)
     provider.save()
   }
 
   func deleteAllPostsFromPersistentStore() {
-
+    guard let posts = provider.fetchData(for: CDPost.self) else { return }
+    posts.forEach { provider.deleteObject(object: $0) }
   }
 
   func deleteAllUsersFromPersistentStore() {
-    
+    guard let users = provider.fetchData(for: CDUser.self) else { return }
+    users.forEach { provider.deleteObject(object: $0) }
   }
 
 }

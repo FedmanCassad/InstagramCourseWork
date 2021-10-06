@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  InstagramFeed
+
+  Created by Vladimir Banushkin on 05.10.2021.
+  Copyright © 2021 e-Legion. All rights reserved.
+*/
+"loginPlaceholder" = "Имя пользователя";
+"passwordPlaceholder" = "Пароль";
+"signInButtonTitle" = "Войти";

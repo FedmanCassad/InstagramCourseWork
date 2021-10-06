@@ -12,15 +12,14 @@ final class FilterThumbnailCellViewModel: IFilterThumbnailCellViewModel {
   var filterKey: String
   let processingQueue: OperationQueue
   var error: Dynamic<ErrorHandlingDomain?> = Dynamic(nil)
-  
+
   init(filterKey: String, queue: OperationQueue, image: UIImage) {
     self.filterKey = filterKey
     self.processingQueue = queue
     self.processingImage = image
     processImage()
   }
-  
-  
+
   private func processImage() {
     let operation = FilteringOperation(image: processingImage, filterKey: filterKey)
     operation.completionBlock = {[weak self] in

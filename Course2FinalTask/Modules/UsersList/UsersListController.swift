@@ -1,13 +1,12 @@
 import UIKit
 
-
-protocol UsersListCellDelegate {
-  func profileCellTapped(by user: User) -> Void
+protocol UsersListCellDelegate: AnyObject {
+  func profileCellTapped(by user: User)
 }
 
 final class UsersListViewController: UIViewController {
 
-  //MARK: - Props
+  // MARK: - Props
   let viewModel: IUsersListViewModel
   lazy var tableView: UITableView = {
     let tableView = UITableView()
@@ -21,17 +20,17 @@ final class UsersListViewController: UIViewController {
     return tableView
   }()
 
-  //MARK: - Init here
+  // MARK: - Init here
   init(with viewModel: IUsersListViewModel) {
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
-  //MARK: - Lifecycle
+
+  // MARK: - Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
     view.addSubview(tableView)
@@ -42,7 +41,7 @@ final class UsersListViewController: UIViewController {
     activateConstraints()
   }
 
-  //MARK: - Activating autolayout constraints
+  // MARK: - Activating autolayout constraints
   private func activateConstraints() {
     NSLayoutConstraint.activate([
       tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -53,7 +52,7 @@ final class UsersListViewController: UIViewController {
   }
 }
 
-//MARK: - UITableView delegate methods
+// MARK: - UITableView delegate methods
 extension UsersListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let profileViewModelToShow = viewModel.getProfileViewModel(forUserAt: indexPath)
@@ -70,8 +69,10 @@ extension UsersListViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let viewModel = viewModel.getCellViewModel(atIndexPath: indexPath)
     viewModel.delegate = self
-    guard let cell =  tableView.dequeueReusableCell(withIdentifier: UsersListCell.identifier,
-                                                    for: indexPath) as? UsersListCell else {
+    guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: UsersListCell.identifier,
+            for: indexPath
+    ) as? UsersListCell else {
       return UITableViewCell()
     }
     cell.configure(with: viewModel)
@@ -83,11 +84,10 @@ extension UsersListViewController: UITableViewDataSource {
   }
 }
 
-//MARK: - Forwarding user from cell by delegate pattern
+// MARK: - Forwarding user from cell by delegate pattern
 extension UsersListViewController: UsersListCellDelegate {
   func profileCellTapped(by user: User) {
     let profileVC = ProfileViewController(with: ProfileViewModel(user: user))
     navigationController?.pushViewController(profileVC, animated: true)
   }
 }
-

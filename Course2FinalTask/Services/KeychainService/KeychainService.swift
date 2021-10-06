@@ -1,5 +1,5 @@
-import Security
 import Foundation
+import Security
 
 protocol IKeychainTokenManagement {
   static func saveToken(token: String)
@@ -15,7 +15,7 @@ protocol IKeychainTokenManagement {
 
 final class KeychainService {
   static let server = "localhost"
-  
+
   private init() {}
 
   @discardableResult
@@ -46,11 +46,11 @@ final class KeychainService {
       kSecClass as String: kSecClassInternetPassword,
       kSecAttrAccount as String: key,
       kSecReturnData as String: kCFBooleanTrue!,
-      kSecMatchLimit as String: kSecMatchLimitOne ] as [String : Any]
-    var dataTypeRef: AnyObject? = nil
+      kSecMatchLimit as String: kSecMatchLimitOne ] as [String: Any]
+    var dataTypeRef: AnyObject?
     let status: OSStatus = SecItemCopyMatching(query as CFDictionary, &dataTypeRef)
     if status == noErr {
-      return dataTypeRef as! Data?
+      return dataTypeRef as? Data
     } else {
       return nil
     }
@@ -99,12 +99,12 @@ extension KeychainService: IKeychainTokenManagement {
   }
 
   static func getLogin() -> String? {
-    guard let loginData = receive(key: "login") else { return nil}
+    guard let loginData = receive(key: "login") else { return nil }
     return String(data: loginData, encoding: .utf8)
   }
 
   static func getPassword() -> String? {
-    guard let passwordData = receive(key: "password") else { return nil}
+    guard let passwordData = receive(key: "password") else { return nil }
     return String(data: passwordData, encoding: .utf8)
   }
 

@@ -21,7 +21,7 @@ class ChooseFilterViewController: UIViewController {
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.backgroundColor = .white
     collectionView.isPagingEnabled = true
-    collectionView.dataSource = viewModel as! ChooseFilterScreenViewModel
+    collectionView.dataSource = viewModel as? ChooseFilterScreenViewModel
     collectionView.delegate = self
     collectionView.toAutoLayout()
     return collectionView
@@ -32,10 +32,12 @@ class ChooseFilterViewController: UIViewController {
     super.init(nibName: nil, bundle: nil)
     view.addSubview(mainImageView)
     view.addSubview(filterThumbnails)
-    navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next",
-                                                        style: .plain,
-                                                        target: self,
-                                                        action: #selector(goToSharePostVC))
+    navigationItem.rightBarButtonItem = UIBarButtonItem(
+      title: "Next",
+      style: .plain,
+      target: self,
+      action: #selector(goToSharePostVC)
+    )
     setupBindings()
   }
 
@@ -48,7 +50,7 @@ class ChooseFilterViewController: UIViewController {
   override func viewDidLayoutSubviews() {
     activateConstraints()
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -74,20 +76,22 @@ class ChooseFilterViewController: UIViewController {
       filterThumbnails.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
     ])
   }
-  
+
   @objc func goToSharePostVC() {
-    guard let image = mainImageView.image else {return}
+    guard let image = mainImageView.image else { return }
     let targetVC = SharePostViewController(SharePostScreenViewModel(with: image))
     navigationController?.pushViewController(targetVC, animated: true)
   }
 }
 
 extension ChooseFilterViewController: UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView,
-                      layout collectionViewLayout: UICollectionViewLayout,
-                      sizeForItemAt indexPath: IndexPath) -> CGSize {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
     let height = view.safeAreaLayoutGuide.layoutFrame.height - mainImageView.frame.height
-    let width = view.frame.width/3
+    let width = view.frame.width / 3
     return CGSize(width: width, height: height)
   }
 

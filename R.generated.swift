@@ -307,6 +307,74 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
 
+  /// This `R.string` struct is generated, and contains static references to 1 localization tables.
+  struct string {
+    /// This `R.string.localizable` struct is generated, and contains static references to 3 localization keys.
+    struct localizable {
+      /// en translation: Login
+      ///
+      /// Locales: en, ru
+      static let loginPlaceholder = Rswift.StringResource(key: "loginPlaceholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+      /// en translation: Password
+      ///
+      /// Locales: en, ru
+      static let passwordPlaceholder = Rswift.StringResource(key: "passwordPlaceholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+      /// en translation: Sign In
+      ///
+      /// Locales: en, ru
+      static let signInButtonTitle = Rswift.StringResource(key: "signInButtonTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+
+      /// en translation: Login
+      ///
+      /// Locales: en, ru
+      static func loginPlaceholder(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("loginPlaceholder", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "loginPlaceholder"
+        }
+
+        return NSLocalizedString("loginPlaceholder", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Password
+      ///
+      /// Locales: en, ru
+      static func passwordPlaceholder(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("passwordPlaceholder", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "passwordPlaceholder"
+        }
+
+        return NSLocalizedString("passwordPlaceholder", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Sign In
+      ///
+      /// Locales: en, ru
+      static func signInButtonTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("signInButtonTitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "signInButtonTitle"
+        }
+
+        return NSLocalizedString("signInButtonTitle", bundle: bundle, comment: "")
+      }
+
+      fileprivate init() {}
+    }
+
+    fileprivate init() {}
+  }
+
   fileprivate struct intern: Rswift.Validatable {
     fileprivate static func validate() throws {
       try _R.validate()

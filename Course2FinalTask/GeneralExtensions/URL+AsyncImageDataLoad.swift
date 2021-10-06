@@ -9,9 +9,8 @@
 import Foundation
 
 extension URL {
-  
-  func getPNGData(completion: @escaping ((Result<Data?,Error>) -> Void)){
-    URLSession(configuration: .default).dataTask(with: self) {data, response, error in
+  func getPNGData(completion: @escaping ((Result<Data?, Error>) -> Void)) {
+    URLSession(configuration: .default).dataTask(with: self) {data, _, error in
       if let error = error {
         completion(.failure(error))
       }

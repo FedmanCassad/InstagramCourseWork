@@ -8,20 +8,19 @@
 
 import UIKit
 
-
 final class FilteringOperation: Operation {
   enum Modifiers {
     static let intensityConst: CGFloat = 0.5
     static let radiusConst: CGFloat = 50
     static let scaleConst: CGFloat = 12.5
-    static let centerConst: CIVector = CIVector(x:UIScreen.main.bounds.width/2,
-                                                y: UIScreen.main.bounds.width/2)
+    static let centerConst: CIVector = CIVector(x: UIScreen.main.bounds.width / 2,
+                                                y: UIScreen.main.bounds.width / 2)
   }
 
   private var inputImage: UIImage
   private(set) var outputImage: UIImage?
   private var  filterKey: String
-  
+
   init(image: UIImage, filterKey: String) {
     self.inputImage = image
     self.filterKey = filterKey
@@ -39,7 +38,7 @@ final class FilteringOperation: Operation {
   }
 
   private func setModifiers(for filter: CIFilter) {
-    if filter.inputKeys.contains(kCIInputIntensityKey){
+    if filter.inputKeys.contains(kCIInputIntensityKey) {
       filter.setValue(Modifiers.intensityConst, forKey: kCIInputIntensityKey)
     }
     if filter.inputKeys.contains(kCIInputRadiusKey) {
