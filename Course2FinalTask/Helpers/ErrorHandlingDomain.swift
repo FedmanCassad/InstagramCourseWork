@@ -1,10 +1,5 @@
 import UIKit
-//
-// enum DestinationMeaning {
-//  case followers
-//  case follows
-// }
-//
+
 public enum ErrorHandlingDomain: Error, Equatable {
 
   public static func == (lhs: ErrorHandlingDomain, rhs: ErrorHandlingDomain) -> Bool {

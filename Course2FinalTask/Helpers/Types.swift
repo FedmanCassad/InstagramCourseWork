@@ -1,11 +1,3 @@
-//
-//  Types.swift
-//  Course2FinalTask
-//
-//  Created by Vladimir Banushkin on 01.10.2021.
-//  Copyright © 2021 e-Legion. All rights reserved.
-//
-
 import Foundation
 import Kingfisher
 
@@ -16,8 +8,14 @@ typealias PostsResult = (Result<[Post], ErrorHandlingDomain>) -> Void
 typealias TokenResult = (Result<TokenModel, ErrorHandlingDomain>) -> Void
 typealias EmptyResult = (Result<Void, ErrorHandlingDomain>) -> Void
 typealias ImageCachingClosure = (Result<RetrieveImageResult, KingfisherError>) -> Void
+// swiftlint:disable:next type_name
+typealias L = R.string.localizable
 
 protocol ImageDataSavingAgent {
   func saveAvatarData(data: Data)
   func savePostImageData(data: Data)
+}
+
+public enum UsersListType {
+  case followers, followings
 }

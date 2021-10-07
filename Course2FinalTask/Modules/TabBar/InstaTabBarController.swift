@@ -3,9 +3,9 @@ import UIKit
 final class InstaTabBarController: UITabBarController {
 
 	enum Titles {
-		static let feed = "Feed"
-		static let addPost = "New post"
-		static let profile = "Profile"
+    static let feed = L.feedControllerTitle()
+    static let addPost = L.newPostControllerTitle()
+    static let profile = L.profileControllerTitle()
 	}
 
 	override func viewDidLoad() {

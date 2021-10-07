@@ -227,7 +227,7 @@ final class FeedCell: UITableViewCell {
       postImageView.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 8),
       likesDisplayButton.centerYAnchor.constraint(equalTo: likeButton.centerYAnchor),
       likesDisplayButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-      likesDisplayButton.widthAnchor.constraint(equalToConstant: 65),
+      likesDisplayButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
       likeButton.widthAnchor.constraint(equalToConstant: 44),
       likeButton.heightAnchor.constraint(equalTo: likeButton.widthAnchor),
       likeButton.topAnchor.constraint(equalTo: postImageView.bottomAnchor),

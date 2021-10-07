@@ -1,36 +1,36 @@
 import Foundation
 
 protocol ILoginViewModel: AnyObject {
-
+  
   /// Эта Dynamic обертка для ошибки, при установке значения выполняется замыкание переданное через bind
   /// или bindAndPerform
   var error: Dynamic<ErrorHandlingDomain?> { get }
-
+  
   /// Возвращает false если свойство .text одного из полей пустое, в обратном случае true
   var authFieldsNotEmpty: Bool { get }
-
+  
   /// Вычисляет уровень прозрачности для кнопки login'а в зависимости от заполненности полей.
   var loginButtonOpacityLevel: Float { get }
-
+  
   /// При любом изменении свойства .text поля для ввода логина, значение поля сохраняется в loginText.
   var loginText: String? { get set }
-
+  
   /// При любом изменении свойства .text поля для ввода пароля, значение поля сохраняется в passwordText.
   var passwordText: String? { get set }
-
+  
   /// Замыкание куда передается логин и пароль сохраненные в KeyChain для заполнения соответствующих полей
   var needFillTextFieldsFromSafeStorage: ((String, String) -> Void)? { get set }
-
+  
   /// Инициирует действия со стороны viewController (загрузка основных контроллеров и последующее их отображение)
   var loginSuccessful: (() -> Void)? { get set }
-
+  
   func signInButtonTapped()
   func checkSavedCredentials()
   func alertOKButtonTapped()
 }
 
 final class LoginViewModel: ILoginViewModel {
-
+  
   // MARK: - Props here
   var error: Dynamic<ErrorHandlingDomain?> = Dynamic(nil)
   private let dataProvider: ILoginFlow = DataProviderFacade.shared
@@ -39,26 +39,26 @@ final class LoginViewModel: ILoginViewModel {
   var passwordText: String?
   var loginSuccessful: (() -> Void)?
   var needFillTextFieldsFromSafeStorage: ((String, String) -> Void)?
-
+  
   var authFieldsNotEmpty: Bool {
     guard let login = loginText,
           let password = passwordText else { return false }
     return login.isEmpty || password.isEmpty ? false : true
   }
-
+  
   var loginButtonOpacityLevel: Float {
     return authFieldsNotEmpty ? 1 : 0.3
   }
-
+  
   // MARK: - This method is for handling completion for alerts
   func alertOKButtonTapped() {
     performLoginFlow()
   }
-
+  
   private func checkSavedToken() -> Bool {
     KeychainService.getToken() != nil
   }
-
+  
   // MARK: - Methods here
   private func checkToken() {
     guard checkSavedToken() else {
@@ -79,8 +79,9 @@ final class LoginViewModel: ILoginViewModel {
       }
     }
   }
-
+  
   private func performLoginFlow() {
+    LockingView.lock()
     if let login = loginText,
        let password = passwordText {
       let signInModel = SignInModel(login: login, password: password)
@@ -103,8 +104,9 @@ final class LoginViewModel: ILoginViewModel {
         }
       }
     }
+    LockingView.unlock()
   }
-
+  
   func checkSavedCredentials() {
     guard checkSavedToken() else {
       error.value = .noTokenStored
@@ -118,7 +120,7 @@ final class LoginViewModel: ILoginViewModel {
       }
     }
   }
-
+  
   func signInButtonTapped() {
     performLoginFlow()
   }

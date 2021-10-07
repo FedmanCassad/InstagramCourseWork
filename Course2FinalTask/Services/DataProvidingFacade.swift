@@ -285,6 +285,7 @@ final class DataProviderFacade: IDataProviderFacade {
   func likePost(by postID: Post.ID, handler: @escaping PostResult) {
     LockingView.lock()
     guard mode == .online else {
+      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
       return
     }
@@ -295,6 +296,7 @@ final class DataProviderFacade: IDataProviderFacade {
   func unlikePost(by postID: Post.ID, handler: @escaping PostResult) {
     LockingView.lock()
     guard mode == .online else {
+      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
       return
     }
@@ -304,6 +306,7 @@ final class DataProviderFacade: IDataProviderFacade {
   func usersLikedSpecificPost(by postID: Post.ID, handler: @escaping UsersResult) {
     LockingView.lock()
     guard mode == .online else {
+      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
       return
     }
@@ -314,6 +317,7 @@ final class DataProviderFacade: IDataProviderFacade {
   func uploadPost(image: Data?, description: String, handler: @escaping PostResult) {
     LockingView.lock()
     guard mode == .online else {
+      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
       return
     }
@@ -337,13 +341,16 @@ extension DataProviderFacade: ILoginFlow {
       onlineProvider.loginToServer(signInModel: signInModel, handler: handler)
     } else {
       if let token = KeychainService.getToken() {
-
+        LockingView.unlock()
         handler(.success(TokenModel(token: token)))
       }
     }
   }
 
   func checkToken(handler: @escaping EmptyResult) {
+    defer {
+      LockingView.unlock()
+    }
     LockingView.lock()
     onlineProvider.checkToken {result in
       switch result {
@@ -364,9 +371,12 @@ extension DataProviderFacade: ILoginFlow {
 
   func logOut(handler: @escaping EmptyResult) {
     if mode == .online {
-      onlineProvider.logOut(handler: handler)
       KeychainService.deleteToken()
+      offlineProvider.deleteAllPostsFromPersistentStore()
+      offlineProvider.deleteAllUsersFromPersistentStore()
+      onlineProvider.logOut(handler: handler)
     } else {
+      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
     }
   }

@@ -309,20 +309,146 @@ struct R: Rswift.Validatable {
 
   /// This `R.string` struct is generated, and contains static references to 1 localization tables.
   struct string {
-    /// This `R.string.localizable` struct is generated, and contains static references to 3 localization keys.
+    /// This `R.string.localizable` struct is generated, and contains static references to 12 localization keys.
     struct localizable {
+      /// en translation: Feed
+      ///
+      /// Locales: en, ru
+      static let feedControllerTitle = Rswift.StringResource(key: "feedControllerTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+      /// en translation: Follow
+      ///
+      /// Locales: en, ru
+      static let followButtonTitle = Rswift.StringResource(key: "followButtonTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+      /// en translation: Followers: 
+      ///
+      /// Locales: en, ru
+      static let followersLabelTitle = Rswift.StringResource(key: "followersLabelTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+      /// en translation: Following: 
+      ///
+      /// Locales: en, ru
+      static let followedLabelTitle = Rswift.StringResource(key: "followedLabelTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+      /// en translation: Likes: 
+      ///
+      /// Locales: en, ru
+      static let likesCountLabel = Rswift.StringResource(key: "likesCountLabel", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+      /// en translation: Log out
+      ///
+      /// Locales: en, ru
+      static let logOutButtonTitle = Rswift.StringResource(key: "logOutButtonTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
       /// en translation: Login
       ///
       /// Locales: en, ru
       static let loginPlaceholder = Rswift.StringResource(key: "loginPlaceholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+      /// en translation: New post
+      ///
+      /// Locales: en, ru
+      static let newPostControllerTitle = Rswift.StringResource(key: "newPostControllerTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
       /// en translation: Password
       ///
       /// Locales: en, ru
       static let passwordPlaceholder = Rswift.StringResource(key: "passwordPlaceholder", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+      /// en translation: Profile
+      ///
+      /// Locales: en, ru
+      static let profileControllerTitle = Rswift.StringResource(key: "profileControllerTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
       /// en translation: Sign In
       ///
       /// Locales: en, ru
       static let signInButtonTitle = Rswift.StringResource(key: "signInButtonTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+      /// en translation: Unfollow
+      ///
+      /// Locales: en, ru
+      static let unfollowButtonTitle = Rswift.StringResource(key: "unfollowButtonTitle", tableName: "Localizable", bundle: R.hostingBundle, locales: ["en", "ru"], comment: nil)
+
+      /// en translation: Feed
+      ///
+      /// Locales: en, ru
+      static func feedControllerTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("feedControllerTitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "feedControllerTitle"
+        }
+
+        return NSLocalizedString("feedControllerTitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Follow
+      ///
+      /// Locales: en, ru
+      static func followButtonTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("followButtonTitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "followButtonTitle"
+        }
+
+        return NSLocalizedString("followButtonTitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Followers: 
+      ///
+      /// Locales: en, ru
+      static func followersLabelTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("followersLabelTitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "followersLabelTitle"
+        }
+
+        return NSLocalizedString("followersLabelTitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Following: 
+      ///
+      /// Locales: en, ru
+      static func followedLabelTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("followedLabelTitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "followedLabelTitle"
+        }
+
+        return NSLocalizedString("followedLabelTitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Likes: 
+      ///
+      /// Locales: en, ru
+      static func likesCountLabel(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("likesCountLabel", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "likesCountLabel"
+        }
+
+        return NSLocalizedString("likesCountLabel", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Log out
+      ///
+      /// Locales: en, ru
+      static func logOutButtonTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("logOutButtonTitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "logOutButtonTitle"
+        }
+
+        return NSLocalizedString("logOutButtonTitle", bundle: bundle, comment: "")
+      }
 
       /// en translation: Login
       ///
@@ -337,6 +463,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("loginPlaceholder", bundle: bundle, comment: "")
+      }
+
+      /// en translation: New post
+      ///
+      /// Locales: en, ru
+      static func newPostControllerTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("newPostControllerTitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "newPostControllerTitle"
+        }
+
+        return NSLocalizedString("newPostControllerTitle", bundle: bundle, comment: "")
       }
 
       /// en translation: Password
@@ -354,6 +495,21 @@ struct R: Rswift.Validatable {
         return NSLocalizedString("passwordPlaceholder", bundle: bundle, comment: "")
       }
 
+      /// en translation: Profile
+      ///
+      /// Locales: en, ru
+      static func profileControllerTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("profileControllerTitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "profileControllerTitle"
+        }
+
+        return NSLocalizedString("profileControllerTitle", bundle: bundle, comment: "")
+      }
+
       /// en translation: Sign In
       ///
       /// Locales: en, ru
@@ -367,6 +523,21 @@ struct R: Rswift.Validatable {
         }
 
         return NSLocalizedString("signInButtonTitle", bundle: bundle, comment: "")
+      }
+
+      /// en translation: Unfollow
+      ///
+      /// Locales: en, ru
+      static func unfollowButtonTitle(preferredLanguages: [String]? = nil) -> String {
+        guard let preferredLanguages = preferredLanguages else {
+          return NSLocalizedString("unfollowButtonTitle", bundle: hostingBundle, comment: "")
+        }
+
+        guard let (_, bundle) = localeBundle(tableName: "Localizable", preferredLanguages: preferredLanguages) else {
+          return "unfollowButtonTitle"
+        }
+
+        return NSLocalizedString("unfollowButtonTitle", bundle: bundle, comment: "")
       }
 
       fileprivate init() {}

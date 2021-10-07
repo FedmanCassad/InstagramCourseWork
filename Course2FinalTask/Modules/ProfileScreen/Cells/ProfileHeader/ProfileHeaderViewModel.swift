@@ -7,9 +7,7 @@
 //
 
 import Foundation
-public enum UsersListType {
-  case followers, followings
-}
+
 protocol IProfileHeaderViewModel: AnyObject, ImageDataSavingAgent {
   var user: Dynamic<User> { get }
   var isCurrentUser: Dynamic<Bool> { get set }
@@ -35,11 +33,11 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
   var error: Dynamic<ErrorHandlingDomain?>
 
   var followersText: String {
-    "Followers: " + String(user.value.followedByCount)
+    L.followersLabelTitle() + String(user.value.followedByCount)
   }
 
   var followingsText: String {
-    "Following: " + String(user.value.followsCount)
+    L.followedLabelTitle() + String(user.value.followsCount)
   }
 
   var avatarImageData: Data? {
@@ -47,9 +45,10 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
   }
 
   var followOrUnfollowButtonTitle: String {
-    let title = user.value.currentUserFollowsThisUser ? "Unfollow" : "Follow"
+    let title = user.value.currentUserFollowsThisUser ? L.unfollowButtonTitle() : L.followButtonTitle()
     return title
   }
+
   private var provider: IDataProviderFacade = DataProviderFacade.shared
 
   init(user: User? = NetworkEngine.shared.currentUser) {

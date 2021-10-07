@@ -102,7 +102,7 @@ final class FeedCellViewModel: IFeedCellViewModel {
   }
 
   var likedByCount: String {
-    "Likes: " + String(post.likedByCount)
+    L.likesCountLabel() + String(post.likedByCount)
   }
 
   func likesCountTapped() {

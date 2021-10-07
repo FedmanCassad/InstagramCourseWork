@@ -11,7 +11,7 @@ final class LoginViewController: UIViewController {
     textField.delegate = self
     textField.returnKeyType = .next
     textField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
-    textField.placeholder = R.string.localizable.loginPlaceholder()
+    textField.placeholder = L.loginPlaceholder()
     textField.keyboardType = .emailAddress
     textField.toAutoLayout()
     textField.addCornerEffects(cornerRadius: 5,
@@ -33,7 +33,7 @@ final class LoginViewController: UIViewController {
     textField.isSecureTextEntry = true
     textField.keyboardType = .asciiCapable
     textField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
-    textField.placeholder = R.string.localizable.passwordPlaceholder()
+    textField.placeholder = L.passwordPlaceholder()
     textField.addCornerEffects(cornerRadius: 5,
                                fillColor: .white,
                                shadowColor: .black.withAlphaComponent(0.2),
@@ -50,7 +50,7 @@ final class LoginViewController: UIViewController {
     let button = UIButton()
     button.backgroundColor = UIColor.hexStringToUIColor(hex: "#007AFF")
     button.tintColor = .white
-    button.setTitle(R.string.localizable.signInButtonTitle(), for: .normal)
+    button.setTitle(L.signInButtonTitle(), for: .normal)
     button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
     button.layer.cornerRadius = 5
     button.layer.opacity = 0.3

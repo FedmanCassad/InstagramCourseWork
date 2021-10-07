@@ -140,11 +140,17 @@ final class PersistentDataProvider: IPersistentDataProvider {
   }
 
   func deleteAllPostsFromPersistentStore() {
+    defer {
+      LockingView.unlock()
+    }
     guard let posts = provider.fetchData(for: CDPost.self) else { return }
     posts.forEach { provider.deleteObject(object: $0) }
   }
 
   func deleteAllUsersFromPersistentStore() {
+    defer {
+      LockingView.unlock()
+    }
     guard let users = provider.fetchData(for: CDUser.self) else { return }
     users.forEach { provider.deleteObject(object: $0) }
   }

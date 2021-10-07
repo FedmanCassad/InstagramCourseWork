@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  Course2FinalTask
-//
-//  Copyright © 2018 e-Legion. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain

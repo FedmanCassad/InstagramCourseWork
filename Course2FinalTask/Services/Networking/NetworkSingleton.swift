@@ -133,7 +133,7 @@ class NetworkEngine: INetworkEngine {
   var tempUser: User?
   var token: String?
   let session: URLSession = URLSession(configuration: .default)
-  private(set) var location: HostLocation = .localhost
+  private(set) var location: HostLocation = .LANIP
 
   /// Общий и единственный объект класса
   static var shared: NetworkEngine = {
@@ -157,6 +157,7 @@ class NetworkEngine: INetworkEngine {
     let decoder = JSONDecoder()
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+    dateFormatter.locale = Locale.current
     decoder.dateDecodingStrategy = .formatted(dateFormatter)
     return try? decoder.decode(T.self, from: data)
   }

@@ -55,7 +55,7 @@ class HeaderView: UICollectionReusableView {
   lazy var logOutButton: UIButton = {
     let button = UIButton()
     button.toAutoLayout()
-    button.setTitle("Log out", for: .normal)
+    button.setTitle(L.logOutButtonTitle(), for: .normal)
     button.backgroundColor = UIColor.hexStringToUIColor(hex: "#007AFF")
     button.layer.cornerRadius = 5
     button.setTitleColor(.white, for: .normal)
@@ -73,7 +73,7 @@ class HeaderView: UICollectionReusableView {
     followOrUnfollowButton.centerYAnchor.constraint(equalTo: fullNameLabel.centerYAnchor),
     followOrUnfollowButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
     followOrUnfollowButton.heightAnchor.constraint(equalToConstant: 25),
-    followOrUnfollowButton.widthAnchor.constraint(equalToConstant: 75)
+    followOrUnfollowButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 75)
   ]
 
   weak var delegate: HeaderViewDelegate?
@@ -114,7 +114,7 @@ class HeaderView: UICollectionReusableView {
       fullNameLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 50),
       followersInfoButton.leadingAnchor.constraint(equalTo: avatar.trailingAnchor, constant: 8),
       followersInfoButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-      followersInfoButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 50),
+      followersInfoButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 65),
       followingsInfoButton.centerYAnchor.constraint(equalTo: followersInfoButton.centerYAnchor),
       followingsInfoButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 50),
       followingsInfoButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
@@ -151,7 +151,6 @@ class HeaderView: UICollectionReusableView {
         )!
       }
       DispatchQueue.main.async {
-
         self.fullNameLabel.text = user.fullName
         self.followersInfoButton.setTitle(viewModel?.followersText, for: .normal)
         self.followingsInfoButton.setTitle(viewModel?.followingsText, for: .normal)
