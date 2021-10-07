@@ -23,7 +23,6 @@ class FeedViewModelTests: XCTestCase {
     try super.tearDownWithError()
   }
 
-  // Use only after
   func testRequestFeedPostsPostsShouldHaveMoreThenZeroPostsStored () {
     let expectation = expectation(description: "feedRequest")
     mockModel.requestFeedPosts { result in
