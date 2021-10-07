@@ -23,8 +23,12 @@ protocol ILoginViewModel: AnyObject {
   
   /// Инициирует действия со стороны viewController (загрузка основных контроллеров и последующее их отображение)
   var loginSuccessful: (() -> Void)? { get set }
-  
+
+  /// Запускает процесс логина
   func signInButtonTapped()
+
+
+  /// <#Description#>
   func checkSavedCredentials()
   func alertOKButtonTapped()
 }
