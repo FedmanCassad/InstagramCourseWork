@@ -19,7 +19,7 @@ protocol IFeedViewModel {
   var posts: [Post] { get set }
   var rowsCount: Int { get }
   var dataSource: FeedDataSource? { get set }
-  func requestFeedPosts()
+  func requestFeedPosts(optionalHandler: PostsResult?)
   func updateFeedPost(with post: Post)
   func constructFeedCellViewModel(at indexPath: IndexPath) -> IFeedCellViewModel
 }
@@ -60,13 +60,15 @@ final class FeedViewModel: IFeedViewModel {
   }
 
   // MARK: - Methods
-  func requestFeedPosts() {
+  func requestFeedPosts(optionalHandler: PostsResult? = nil) {
     dataProvider.getFeed {result in
       switch result {
       case let .failure(error):
           self.error.value = error
+        optionalHandler?(.failure(error))
       case let .success(feed):
           self.posts = feed
+        optionalHandler?(.success(feed))
       }
     }
   }

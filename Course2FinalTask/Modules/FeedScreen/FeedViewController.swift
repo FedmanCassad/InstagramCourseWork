@@ -18,7 +18,7 @@ final class FeedViewController: UIViewController {
   var setNeedsRequestPosts: Bool = false {
     didSet {
       if setNeedsRequestPosts {
-        viewModel.requestFeedPosts()
+        viewModel.requestFeedPosts(optionalHandler: nil)
         setNeedsRequestPosts = false
       }
     }
@@ -47,7 +47,7 @@ final class FeedViewController: UIViewController {
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    viewModel.requestFeedPosts()
+    viewModel.requestFeedPosts(optionalHandler: nil)
   }
 
   override func viewDidLayoutSubviews() {

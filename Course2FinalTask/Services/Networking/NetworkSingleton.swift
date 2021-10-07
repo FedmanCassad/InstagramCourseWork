@@ -133,7 +133,7 @@ class NetworkEngine: INetworkEngine {
   var tempUser: User?
   var token: String?
   let session: URLSession = URLSession(configuration: .default)
-  private(set) var location: HostLocation = .LANIP
+  private(set) var location: HostLocation = .localhost
 
   /// Общий и единственный объект класса
   static var shared: NetworkEngine = {
@@ -273,9 +273,6 @@ class NetworkEngine: INetworkEngine {
       .getRequest(for: location, usingURL: .unlikePost)
     performRequest(request: request, completion: handler)
   }
-
-  // MARK: - Logout func
-
 }
 
 // MARK: - Login flow interface implementation

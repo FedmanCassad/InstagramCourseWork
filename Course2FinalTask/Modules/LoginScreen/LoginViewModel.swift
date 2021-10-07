@@ -94,17 +94,20 @@ final class LoginViewModel: ILoginViewModel {
           dataProvider.getCurrentUser {[weak self] result in
             switch result {
             case .success:
+              LockingView.unlock()
               self?.loginSuccessful?()
             case .failure(let error):
+              LockingView.unlock()
               self?.error.value = error
             }
           }
         case  .failure(let error):
+          LockingView.unlock()
           self.error.value = error
         }
       }
     }
-    LockingView.unlock()
+
   }
   
   func checkSavedCredentials() {
