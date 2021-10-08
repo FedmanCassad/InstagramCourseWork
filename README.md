@@ -48,7 +48,7 @@
     + Зайдите в настройки вашей Wi-fi сети, скопируйте ip-адрес.
     + В классе NetworkEngine измените свойство **location** на **.LANIP**
     + Замените код в enum'е HostLocation на:
-"`Swift 
+```Swift 
     enum HostLocation {
     case localhost
     case LANIP
@@ -63,7 +63,7 @@
     }
   }
 }
-"`
+```
 
    
     c) Сервер запустить командой './Run - b [YOUR_IP]:8080'
