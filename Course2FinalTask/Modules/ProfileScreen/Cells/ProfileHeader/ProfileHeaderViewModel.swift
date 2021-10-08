@@ -1,32 +1,50 @@
-//
-//  ProfileHeaderViewModel.swift
-//  Course2FinalTask
-//
-//  Created by Vladimir Banushkin on 08.08.2021.
-//  Copyright © 2021 e-Legion. All rights reserved.
-//
-
 import Foundation
 
 protocol IProfileHeaderViewModel: AnyObject, ImageDataSavingAgent {
-  var user: Dynamic<User> { get }
-  var isCurrentUser: Dynamic<Bool> { get set }
-  var logoutSuccess: Dynamic<Bool>? { get set }
-  var error: Dynamic<ErrorHandlingDomain?> { get set }
-  var followersOfFollowsListUsers: (([User]) -> Void)? { get set }
-  var followersText: String { get }
-  var followingsText: String { get }
-  var avatarImageData: Data? { get }
-  var followOrUnfollowButtonTitle: String { get }
-  func logOut()
-  func followOrUnfollowButtonTapped()
-  func usersListRequested(by type: UsersListType)
 
+  /// Объект User обернутый в Dynamic, при получении value в listener'е происходит конфигурирование UI элементов.
+  var user: Dynamic<User> { get }
+
+  /// В зависимости от значение добавляется кнопка Logout или Follow/Unfollow.
+  var isCurrentUser: Dynamic<Bool> { get set }
+
+  /// Если приходит true, значит подчищены все данные,token инвалидирован, приложение переходит в initial state.
+  var logoutSuccess: Dynamic<Bool>? { get set }
+
+  /// Текст количества подписчиков. Локализован.
+  var followersText: String { get }
+
+  /// Текст количества подписок. Локализован.
+  var followingsText: String { get }
+
+  /// Сырые данные для кэширования в оффлайн хранилище.
+  var avatarImageData: Data? { get }
+
+  /// Текст кнопки подписки/отписки. Локализован.
+  var followOrUnfollowButtonTitle: String { get }
+
+  /// Ошибка, обернута в Dynamic для удобства, в случае присвоения любой ошибки переменной value - вызывается замыкание
+  /// listener - в нашем случае демонстрируется alertController с данным из ошибки.
+  var error: Dynamic<ErrorHandlingDomain?> { get set }
+
+  /// Замыкание в которое приходит массив юзеров. Этот массив прокидывается модели контроллера для последующей
+  /// инициализации и отображения UserListViewController.
+  var followersOrFollowsListUsers: (([User]) -> Void)? { get set }
+
+  /// При нажатии на кнопку logOut обращается к провайдеру DataProvidingFacade который делает всю работу.
+  func logOut()
+
+  /// Реализуется функционал проставления лайка/дизлайка.
+  func followOrUnfollowButtonTapped()
+
+  /// Запрашивает список пользователей
+  /// - Parameter type: в зависимости от параметра запрашиваются либо подписки либо подписчики.
+  func usersListRequested(by type: UsersListType)
 }
 
 final class ProfileHeaderViewModel: IProfileHeaderViewModel {
 
-  var followersOfFollowsListUsers: (([User]) -> Void)?
+  var followersOrFollowsListUsers: (([User]) -> Void)?
   var user: Dynamic<User>
   var isCurrentUser: Dynamic<Bool>
   var logoutSuccess: Dynamic<Bool>?
@@ -93,7 +111,7 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
       case let .failure(error):
         self.error.value = error
       case let .success(users):
-        followersOfFollowsListUsers?(users)
+        followersOrFollowsListUsers?(users)
       }
     }
     if type == .followers {

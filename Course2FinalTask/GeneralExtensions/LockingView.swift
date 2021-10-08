@@ -5,7 +5,6 @@ final class LockingView {
   static let activityIndicator = UIActivityIndicatorView(frame: window?.bounds ?? UIScreen.main.bounds)
 
   static func lock() {
-
     prepareIndicator()
     DispatchQueue.main.async {
       activityIndicator.startAnimating()

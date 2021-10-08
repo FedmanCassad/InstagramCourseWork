@@ -28,6 +28,7 @@ final class ProfileViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .white
+    setupBindings()
   }
 
   func configure() {
@@ -49,6 +50,13 @@ final class ProfileViewController: UIViewController {
     activateConstraints()
   }
 
+  private func setupBindings() {
+    viewModel.error.bind {[unowned self] error in
+      guard let error = error else { return }
+      self.alert(error: error)
+    }
+  }
+
   private func activateConstraints() {
     NSLayoutConstraint.activate([
       collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -62,7 +70,7 @@ final class ProfileViewController: UIViewController {
 // MARK: - UICollectionViewDataSource methods
 extension ProfileViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    viewModel.posts?.value.count ?? 0
+    viewModel.posts?.count ?? 0
   }
 
   func collectionView(
@@ -77,7 +85,7 @@ extension ProfileViewController: UICollectionViewDataSource {
         withReuseIdentifier: HeaderView.identifier,
         for: indexPath
       ) as? HeaderView else { return UICollectionReusableView() }
-      let viewModel = ProfileHeaderViewModel(user: viewModel.user.value)
+      let viewModel = ProfileHeaderViewModel(user: viewModel.user)
       header.configure(with: viewModel)
       header.delegate = self
       return header

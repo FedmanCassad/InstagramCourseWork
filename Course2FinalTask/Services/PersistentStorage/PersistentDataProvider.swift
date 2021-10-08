@@ -1,7 +1,7 @@
 import Foundation
 
 protocol IPersistentDataProvider {
-  var provider: CoreDataService { get set }
+  var provider: CoreDataService! { get }
   /// Получение текущего пользователя из хранилища.
   /// - Parameter handler: В замыкание приходит или не приходит объект типа User, через объект
   ///   Result<User, ErrorHandlingDomain>
@@ -52,7 +52,7 @@ final class PersistentDataProvider: IPersistentDataProvider {
   }
 
   static let shared = PersistentDataProvider()
-  var provider: CoreDataService = CoreDataService(dataModelName: "OfflineCache")
+  var provider: CoreDataService!
 
   private init() {}
 
@@ -60,6 +60,7 @@ final class PersistentDataProvider: IPersistentDataProvider {
     defer {
       LockingView.unlock()
     }
+    provider = CoreDataService(dataModelName: "OfflineCache")
     guard let id = getCurrentUserID() else { return nil }
     let predicates = SearchPredicateConstructor.getPredicates(by: ["id": id])
     let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)

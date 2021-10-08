@@ -114,7 +114,7 @@ class HeaderView: UICollectionReusableView {
       fullNameLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 50),
       followersInfoButton.leadingAnchor.constraint(equalTo: avatar.trailingAnchor, constant: 8),
       followersInfoButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
-      followersInfoButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 65),
+      followersInfoButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
       followingsInfoButton.centerYAnchor.constraint(equalTo: followersInfoButton.centerYAnchor),
       followingsInfoButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 50),
       followingsInfoButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
@@ -173,7 +173,7 @@ class HeaderView: UICollectionReusableView {
       guard let error = error else { return }
       delegate?.showError(error: error)
     }
-    viewModel?.followersOfFollowsListUsers = {[unowned self] users in
+    viewModel?.followersOrFollowsListUsers = {[unowned self] users in
       delegate?.proceedToUsersList(with: users)
     }
   }
