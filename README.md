@@ -32,8 +32,6 @@
 
 Дизайн и структура приложения соответствует данному макету:
 
-![Layout design](https://github.com/Blissfulman/Course5FinalTask/blob/main/Images/Layout-design.png)
-
 ### Запуск сервера
 Все команды выполняются в **Терминале** запущенном по адресу [PROJECT_NAME]/Server.
 1) Установка Vapor.(Server-side swift)
@@ -46,14 +44,14 @@
 `sudo xattr -d com.apple.quarantine Run`.
 2) Запуск сервера в рижиме localhost:
 `./Run`.
-3) Запуск сервера в режиме,в котором становится возможным запуск на реальном устройстве:
+3) Запуск сервера в режиме,в котором становится возможным запуск на реальном устройстве:/n
     а) Зайдите в настройки вашей Wi-fi сети, скопируйте ip-адрес.
     b) В классе NetworkEngine измените свойство **location** на **.LANIP**
     c)Замените код в enum'е HostLocation на:
-    'enum HostLocation {
+"`{Swift} { 
+enum HostLocation {
   case localhost
   case LANIP
-
   var serverURL: URL {
     switch self {
     case .localhost:
@@ -64,7 +62,9 @@
       return url!
     }
   }
-}'
+}}"`
+
+   
     c) Сервер запустить командой './Run - b [YOUR_IP]:8080'
 4) Остановка сервера:
 Ctrl+C
