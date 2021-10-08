@@ -49,10 +49,10 @@
     b) В классе NetworkEngine измените свойство **location** на **.LANIP**
     c)Замените код в enum'е HostLocation на:
 "`Swift 
-enum HostLocation {
-  case localhost
-  case LANIP
-  var serverURL: URL {
+    enum HostLocation {
+    case localhost
+    case LANIP
+    var serverURL: URL {
     switch self {
     case .localhost:
       let url = URL(string: "http://localhost:8080")
