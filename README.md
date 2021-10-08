@@ -36,7 +36,7 @@
 1) Установка Vapor.(Server-side swift)  
   `brew install vapor/tap/vapor`  
 Если package-менеджер **brew** еще не установлен:  
-```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```
+```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```  
 В случае вывода ошибки ссылающейся на отсутствие библиотеки **libressl**:  
 `brew install libressl`  
 Для запуска неподписонного приложения нужно разблокировать в Gatekeeper исполняемый файл сервера:  
@@ -70,5 +70,5 @@
 Ctrl+C
 
 5)Данные для входа(без кавычек):
-`login: "user"`
+`login: "user"`  
 `password: "qwerty"`
