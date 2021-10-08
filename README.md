@@ -33,16 +33,16 @@
 
 ### Запуск сервера
 Все команды выполняются в **Терминале** запущенном по адресу [PROJECT_NAME]/Server.
-1) Установка Vapor.(Server-side swift)
-  `brew install vapor/tap/vapor`
-Если package-менеджер **brew** еще не установлен:
-`/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
-В случае вывода ошибки ссылающейся на отсутствие библиотеки **libressl**:
-`brew install libressl`
-Для запуска неподписонного приложения нужно разблокировать в Gatekeeper исполняемый файл сервера:
-`sudo xattr -d com.apple.quarantine Run`.
-2) Запуск сервера в рижиме localhost:
-`./Run`.
+1) Установка Vapor.(Server-side swift)  
+  `brew install vapor/tap/vapor`  
+Если package-менеджер **brew** еще не установлен:  
+`/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`  
+В случае вывода ошибки ссылающейся на отсутствие библиотеки **libressl**:  
+`brew install libressl`  
+Для запуска неподписонного приложения нужно разблокировать в Gatekeeper исполняемый файл сервера:  
+`sudo xattr -d com.apple.quarantine Run`.  
+2) Запуск сервера в рижиме localhost:  
+`./Run`.  
 3) Запуск сервера в режиме,в котором становится возможным запуск на реальном устройстве:
     + Зайдите в настройки вашей Wi-fi сети, скопируйте ip-адрес.
     + В классе NetworkEngine измените свойство **location** на **.LANIP**
