@@ -36,5 +36,4 @@ final class InstaTabBarController: UITabBarController {
 
 		self.viewControllers = [feedNavigationController, newPostNavigationController, profileNavigationController]
 	}
-
 }

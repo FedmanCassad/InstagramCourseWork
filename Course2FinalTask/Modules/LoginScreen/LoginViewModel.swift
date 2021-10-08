@@ -3,10 +3,10 @@ import Foundation
 protocol ILoginViewModel: AnyObject {
   
   /// Эта Dynamic обертка для ошибки, при установке значения выполняется замыкание переданное через bind
-  /// или bindAndPerform
+  /// или bindAndPerform.
   var error: Dynamic<ErrorHandlingDomain?> { get }
   
-  /// Возвращает false если свойство .text одного из полей пустое, в обратном случае true
+  /// Возвращает false если свойство .text одного из полей пустое, в обратном случае true.
   var authFieldsNotEmpty: Bool { get }
   
   /// Вычисляет уровень прозрачности для кнопки login'а в зависимости от заполненности полей.
@@ -18,18 +18,22 @@ protocol ILoginViewModel: AnyObject {
   /// При любом изменении свойства .text поля для ввода пароля, значение поля сохраняется в passwordText.
   var passwordText: String? { get set }
   
-  /// Замыкание куда передается логин и пароль сохраненные в KeyChain для заполнения соответствующих полей
+  /// Замыкание куда передается логин и пароль сохраненные в KeyChain для заполнения соответствующих полей.
   var needFillTextFieldsFromSafeStorage: ((String, String) -> Void)? { get set }
   
-  /// Инициирует действия со стороны viewController (загрузка основных контроллеров и последующее их отображение)
+  /// Инициирует действия со стороны viewController (загрузка основных контроллеров и последующее их отображение).
   var loginSuccessful: (() -> Void)? { get set }
 
-  /// Запускает процесс логина
+  /// Запускает процесс логина.
   func signInButtonTapped()
 
-
-  /// <#Description#>
+  /// При наличии в Keychain сохраненных данных пользователя, проводит биометрическую идентификацию, в дальнейшем в
+  /// случае успеха идентификации проверяется сохраненный токен на валидность и в случае успеха пускает на основной
+  /// экран.
   func checkSavedCredentials()
+
+  /// Некая затычка нужная в случае хэндлинга различных ошибок, если случилась безобидная ошибка  при которой
+  /// основной flow приложения может быть продолжен, то используется эта функция.
   func alertOKButtonTapped()
 }
 
@@ -111,7 +115,6 @@ final class LoginViewModel: ILoginViewModel {
         }
       }
     }
-
   }
   
   func checkSavedCredentials() {

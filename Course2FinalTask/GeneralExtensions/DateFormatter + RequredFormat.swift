@@ -1,11 +1,3 @@
-//
-//  DateFormatter + RequredFormat.swift
-//  Course2FinalTask
-//
-//  Created by Vladimir Banushkin on 05.07.2021.
-//  Copyright © 2021 e-Legion. All rights reserved.
-//
-
 import Foundation
 
 extension DateFormatter {

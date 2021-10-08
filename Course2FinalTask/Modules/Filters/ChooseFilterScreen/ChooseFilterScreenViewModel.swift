@@ -1,14 +1,26 @@
 import UIKit
 
 protocol IChooseFilterScreenViewModel {
+
+  /// Картинка с которой работаем, для удобства завернута в Dynamic. Контроллер отображает её в большой UIImageView.
   var mainImage: Dynamic<UIImage> { get set }
+
+  /// Замыкание куда уходит отфильтрованная картинка для отображения в контроллер на большой UIImageView.
   var applyFilteredImage: ((UIImage) -> Void)? { get set }
+
+  /// Ключи фильтрации.
   var filterKeys: [String] { get }
+
+  /// Ошибка, обернута в Dynamic для удобства, в случае присвоения любой ошибки переменной value - вызывается замыкание
+  /// listener - в нашем случае демонстрируется alertController с данным из ошибки.
+  var error: Dynamic<ErrorHandlingDomain?> { get set }
 }
 
 final class ChooseFilterScreenViewModel: NSObject, IChooseFilterScreenViewModel {
+
   var applyFilteredImage: ((UIImage) -> Void)?
   var mainImage: Dynamic<UIImage>
+  var error: Dynamic<ErrorHandlingDomain?>
 
   let effectsKeys: [String] = [
     FilterKeys.CISepiaTone,
@@ -23,7 +35,9 @@ final class ChooseFilterScreenViewModel: NSObject, IChooseFilterScreenViewModel 
   let processingQueue = OperationQueue()
   init(image: UIImage) {
     self.mainImage = Dynamic(image)
+    error = Dynamic(nil)
   }
+  
 }
 
 extension ChooseFilterScreenViewModel: UICollectionViewDataSource {
@@ -48,6 +62,10 @@ extension ChooseFilterScreenViewModel: UICollectionViewDataSource {
 }
 
 extension ChooseFilterScreenViewModel: FiltersThumbnailCellDelegate {
+  func passError(error: ErrorHandlingDomain) {
+    self.error.value = error
+  }
+
   func filterChosen(image: UIImage) {
     applyFilteredImage?(image)
   }

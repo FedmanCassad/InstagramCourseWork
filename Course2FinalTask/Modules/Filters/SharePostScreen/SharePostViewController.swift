@@ -59,22 +59,6 @@ class SharePostViewController: UIViewController {
     activateConstraints()
   }
 
-  private func activateConstraints() {
-    NSLayoutConstraint.activate(
-      [
-        postImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-        postImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-        postImage.widthAnchor.constraint(equalToConstant: 100),
-        postImage.heightAnchor.constraint(equalTo: postImage.widthAnchor),
-        descriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-        descriptionLabel.topAnchor.constraint(equalTo: postImage.bottomAnchor, constant: 32),
-        descriptionTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-        descriptionTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-        descriptionTextField.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8)
-      ]
-    )
-  }
-
   private func setupBindings() {
     viewModel.sharingSuccessful = {[weak self] in
       guard let self = self,
@@ -92,6 +76,22 @@ class SharePostViewController: UIViewController {
     }
   }
 
+  private func activateConstraints() {
+    NSLayoutConstraint.activate(
+      [
+        postImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+        postImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+        postImage.widthAnchor.constraint(equalToConstant: 100),
+        postImage.heightAnchor.constraint(equalTo: postImage.widthAnchor),
+        descriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+        descriptionLabel.topAnchor.constraint(equalTo: postImage.bottomAnchor, constant: 32),
+        descriptionTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+        descriptionTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+        descriptionTextField.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8)
+      ]
+    )
+  }
+
   @objc func sharePost() {
     viewModel.shareButtonTapped()
   }
@@ -99,5 +99,4 @@ class SharePostViewController: UIViewController {
   @objc func textChanged(sender: UITextField) {
     viewModel.description = sender.text ?? ""
   }
-
 }

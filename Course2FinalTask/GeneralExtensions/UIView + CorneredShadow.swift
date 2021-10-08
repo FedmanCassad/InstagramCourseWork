@@ -1,11 +1,3 @@
-//
-//  UIView + CorneredShadow.swift
-//  Course2FinalTask
-//
-//  Created by Vladimir Banushkin on 31.08.2021.
-//  Copyright © 2021 e-Legion. All rights reserved.
-//
-
 import UIKit
 
 extension UIView {

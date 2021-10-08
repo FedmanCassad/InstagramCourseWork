@@ -1,26 +1,42 @@
-//
-//  FeedViewModel.swift
-//  Course2FinalTask
-//
-//  Created by Vladimir Banushkin on 03.07.2021.
-//  Copyright © 2021 e-Legion. All rights reserved.
-//
-
 import UIKit
 typealias FeedDataSource = UITableViewDiffableDataSource<Int, Post>
 typealias FeedSnapshot = NSDiffableDataSourceSnapshot<Int, Post>
 
 protocol IFeedViewModel {
+
+  /// Ошибка, обернута в Dynamic для удобства, в случае присвоения любой ошибки переменной value - вызывается замыкание
+  /// listener - в нашем случае демонстрируется alertController с данным из ошибки.
   var error: Dynamic<ErrorHandlingDomain?> { get }
-  var updateCellViewModel: ((Int) -> Void)? { get set }
-  var authorTapped: ((_ profile: IProfileViewModel) -> Void)? { get set }
-  var moveToUsersList: (([User]) -> Void)? { get set }
-  var likeTapped: (() -> Void)? { get set }
+
+  /// Массив публикаций.
   var posts: [Post] { get set }
-  var rowsCount: Int { get }
+
+  /// Количество строк в таблице - количество публикаций, нужен для ясности.
+  var numberOfRows: Int { get }
+
+  /// Данные для отображения в таблице берутся здесь. Используется DiffableDataSource, новая удобная технология.
   var dataSource: FeedDataSource? { get set }
+
+  /// После всех подкапотных манипуляций сюда прилетает вью модель пользователя для инициализации
+  /// ProfileViewController'а и последующему переходу к нему.
+  var authorTapped: ((_ profile: IProfileViewModel) -> Void)? { get set }
+
+  /// Используется непосредственно для обновления поста в модель ячейки. Передается номер ячейки.
+  var updateCellViewModel: ((Int) -> Void)? { get set }
+
+  /// Сюда прилетает массив пользователей для дальнейшего отображения их в виде списка.
+  var moveToUsersList: (([User]) -> Void)? { get set }
+
+  /// Запрос массива публикаций
+  /// - Parameter optionalHandler: опциональный хендлер нужен для реализации unit теста.
   func requestFeedPosts(optionalHandler: PostsResult?)
+
+  /// Заменяет в массиве публикаций пост на обновленный пост по его id. И затем вызывает updateCellViewModel, который
+  /// достается через контроллер, который дергает нужную ячейку и её модель через tableView.cellForRow(at:)
+  /// - Parameter post: пост на замену.
   func updateFeedPost(with post: Post)
+
+  /// Используется в tableView.dequeueReusableCell для более удобной инициализации модели ячейки.
   func constructFeedCellViewModel(at indexPath: IndexPath) -> IFeedCellViewModel
 }
 
@@ -38,7 +54,6 @@ final class FeedViewModel: IFeedViewModel {
   var error: Dynamic<ErrorHandlingDomain?> = Dynamic(nil)
   var authorTapped: ((IProfileViewModel) -> Void)?
   var moveToUsersList: (([User]) -> Void)?
-  var likeTapped: (() -> Void)?
   var updateCellViewModel: ((Int) -> Void)?
   let dataProvider: IDataProviderFacade = DataProviderFacade.shared
   var dataSource: FeedDataSource?
@@ -55,7 +70,7 @@ final class FeedViewModel: IFeedViewModel {
     }
   }
 
-  var rowsCount: Int {
+  var numberOfRows: Int {
     posts.count
   }
 

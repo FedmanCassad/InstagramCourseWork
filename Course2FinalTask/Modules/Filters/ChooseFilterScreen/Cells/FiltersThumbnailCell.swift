@@ -2,6 +2,7 @@ import UIKit
 
 protocol FiltersThumbnailCellDelegate: AnyObject {
   func filterChosen(image: UIImage)
+  func passError(error: ErrorHandlingDomain)
 }
 
 final class FiltersThumbnailCell: UICollectionViewCell {
@@ -72,6 +73,12 @@ final class FiltersThumbnailCell: UICollectionViewCell {
       thumbnailImage.unlockTheView()
       thumbnailImage.image = image
       }
+    }
+    viewModel?.error.bind {[weak self] error in
+      guard let error = error,
+            let self = self
+      else { return }
+      self.delegate?.passError(error: error)
     }
   }
 

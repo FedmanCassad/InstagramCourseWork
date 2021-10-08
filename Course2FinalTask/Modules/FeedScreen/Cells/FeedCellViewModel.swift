@@ -1,38 +1,69 @@
-//
-//  FeedCellViewModel.swift
-//  Course2FinalTask
-//
-//  Created by Vladimir Banushkin on 04.07.2021.
-//  Copyright © 2021 e-Legion. All rights reserved.
-//
-
 import Foundation
 
 protocol IFeedCellViewModel: AnyObject, ImageDataSavingAgent {
+  
+  /// ID публикации.
   var id: String { get }
+
+  /// Строка описания публикации.
   var postDescription: String { get }
+
+  /// ID автора публикации.
   var author: String { get }
+
+  /// Имя пользователя автора публикации.
   var authorUsername: String { get }
+
+  /// Время создания публикации.
   var createdTime: String { get }
-  var likesDataUpdatedAnimation: (() -> Void)? { get set }
+
+  /// Ссылка на аватар автора.
   var authorAvatarURL: URL { get }
+
+  /// Ссылка на картинку поста.
   var imageURL: URL { get }
+
+  /// Нравится ли текущему пользователю этот пост true: да, false: нет.
   var currentUserLikesThisPost: Bool { get }
+
+  /// Количество лайков публикации.
   var likedByCount: String { get }
-  var eventHandler: IFeedCellEventHandler? { get set }
-  var post: Post { get set }
-  var error: Dynamic<ErrorHandlingDomain>? { get set }
-  func likeTapped()
-  func authorTapped()
+
+  /// Сырые данные картинки поста, нужны для сохранение в оффлайн хранилище.
   var postImageData: Data? { get }
+
+  /// Сырые данные аватарки автора поста, нужны для сохранение в оффлайн хранилище.
   var avatarImageData: Data? { get }
+
+  /// Объект самой публикации.
+  var post: Post { get set }
+
+  /// Обычно родительская viewModel - нужен для проброса ошибок и реализации функций лайк/дизлайк,
+  /// так как требуется обновить и пост с которым проведена манипуляция, и красиво отобразить эти изменения, что не
+  /// получится в одной лишь связке UITableViewCell - TableViewCellViewModel.
+  var eventHandler: IFeedCellEventHandler? { get set }
+
+  /// Замыкание в котором контроллер должен передать анимации в случае апдейта данных поста.
+  var likesDataUpdatedAnimation: (() -> Void)? { get set }
+
+  /// Срабатывает по касанию лайка либо двойного касания по картинке поста.
+  func likeTapped()
+
+  /// Срабатывает при нажатии на аватарку автора или его имя. Получает автора по запрошенному id и передает вью модели
+  /// контроллера для дальнейшей инициализации перехода на профиль пользователя.
+  func authorTapped()
+
+  /// Вызывается при нажатии на кнопку количества лайков, загружается список пользователей которым нравится эта
+  ///  публикация и передается вью модели контроллера для последующего отображения.
   func likesCountTapped()
+
+  /// Иницилизатор
+  /// - Parameter post: инициализируется объектом типа Post.
   init(with post: Post)
 }
 
 final class FeedCellViewModel: IFeedCellViewModel {
 
-  var error: Dynamic<ErrorHandlingDomain>?
   var eventHandler: IFeedCellEventHandler?
   let dataProvider = DataProviderFacade.shared
   var likesDataUpdatedAnimation: (() -> Void)?
