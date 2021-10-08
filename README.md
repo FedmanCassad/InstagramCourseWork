@@ -40,7 +40,7 @@
 `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 В случае вывода ошибки ссылающейся на отсутствие библиотеки **libressl**:
 `brew install libressl`
-Для запуска неподписонного приложения нужно разблокировать в Gatekeeper исполняемый файл сервера:
+Для запуска неподписонного приложения нужно разблокировать в Gatekeeper исполняемый файл сервера:/n
 `sudo xattr -d com.apple.quarantine Run`.
 2) Запуск сервера в рижиме localhost:
 `./Run`.
