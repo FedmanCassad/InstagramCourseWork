@@ -45,9 +45,9 @@
 2) Запуск сервера в рижиме localhost:
 `./Run`.
 3) Запуск сервера в режиме,в котором становится возможным запуск на реальном устройстве:/n
-    а) Зайдите в настройки вашей Wi-fi сети, скопируйте ip-адрес.
-    b) В классе NetworkEngine измените свойство **location** на **.LANIP**
-    c)Замените код в enum'е HostLocation на:
+    + Зайдите в настройки вашей Wi-fi сети, скопируйте ip-адрес.
+    + В классе NetworkEngine измените свойство **location** на **.LANIP**
+    + Замените код в enum'е HostLocation на:
 "`Swift 
     enum HostLocation {
     case localhost
