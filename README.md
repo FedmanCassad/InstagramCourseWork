@@ -34,7 +34,7 @@
 ### Запуск сервера
 Все команды выполняются в **Терминале** запущенном по адресу [PROJECT_NAME]/Server.
 1) Установка Vapor.(Server-side swift)
-`brew install vapor/tap/vapor`
+  `brew install vapor/tap/vapor`
 Если package-менеджер **brew** еще не установлен:
 `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 В случае вывода ошибки ссылающейся на отсутствие библиотеки **libressl**:
