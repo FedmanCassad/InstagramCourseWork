@@ -50,6 +50,7 @@
     а) Зайдите в настройки вашей Wi-fi сети, скопируйте ip-адрес.
     b) В классе NetworkEngine измените свойство **location** на **.LANIP**
     c)Замените код в enum'е HostLocation на:
+    
     'enum HostLocation {
   case localhost
   case LANIP
