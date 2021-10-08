@@ -32,8 +32,6 @@
 
 Дизайн и структура приложения соответствует данному макету:
 
-![Layout design](https://github.com/Blissfulman/Course5FinalTask/blob/main/Images/Layout-design.png)
-
 ### Запуск сервера
 Все команды выполняются в **Терминале** запущенном по адресу [PROJECT_NAME]/Server.
 1) Установка Vapor.(Server-side swift)
