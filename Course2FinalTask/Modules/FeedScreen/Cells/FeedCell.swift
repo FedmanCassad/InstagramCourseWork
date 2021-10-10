@@ -128,10 +128,7 @@ final class FeedCell: UITableViewCell {
                               completionHandler: {[weak self] result in
                                 switch result {
                                 case .failure:
-                                  guard let data = viewModel.postImageData else {
-                                    print("Данных нет")
-                                    return }
-                                  print("Пользователь \(viewModel.authorUsername) - имеет данные")
+                                  guard let data = viewModel.postImageData else { return }
                                   self?.postImageView.image = UIImage(data: data)
                                   self?.layoutIfNeeded()
                                   return
