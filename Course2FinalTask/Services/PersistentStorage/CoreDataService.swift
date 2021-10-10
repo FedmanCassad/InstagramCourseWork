@@ -28,7 +28,6 @@ final class CoreDataService {
           self?.taskContext = self?.container.newBackgroundContext()
           self?.taskContext.mergePolicy = NSMergePolicy.overwrite
         }
-
       }
     }
   }

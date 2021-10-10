@@ -133,7 +133,7 @@ class NetworkEngine: INetworkEngine {
   var tempUser: User?
   var token: String?
   let session: URLSession = URLSession(configuration: .default)
-  private(set) var location: HostLocation = .localhost
+  private(set) var location: HostLocation = .LANIP
 
   /// Общий и единственный объект класса
   static var shared: NetworkEngine = {
