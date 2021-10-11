@@ -124,6 +124,8 @@ final class LoginViewController: UIViewController {
               return
             case .noDataReceived:
               return
+            case .noTokenStored:
+            return
             default:
               viewModel.alertOKButtonTapped()
             }
