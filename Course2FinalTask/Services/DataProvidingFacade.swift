@@ -110,6 +110,9 @@ final class DataProviderFacade: IDataProviderFacade {
   var window: UIWindow? {
     UIApplication.shared.windows.first
   }
+  static let shared = DataProviderFacade()
+  let onlineProvider: INetworkEngine = NetworkEngine.shared
+  let offlineProvider: IPersistentDataProvider! = PersistentDataProvider.shared
 
   lazy var currentUser: User? = nil {
     didSet {
@@ -146,16 +149,11 @@ final class DataProviderFacade: IDataProviderFacade {
     mode = .online
   }
 
-  static let shared = DataProviderFacade()
-
   private init() {
     guard let currentUser = offlineProvider.getCurrentUserFromPersistentStore() else {
       return }
     self.currentUser = User(from: currentUser)
   }
-
-  let onlineProvider: INetworkEngine = NetworkEngine.shared
-  let offlineProvider: IPersistentDataProvider! = PersistentDataProvider.shared
 
   func getCurrentUser(handler: @escaping UserResult) {
     LockingView.lock()
@@ -196,6 +194,7 @@ final class DataProviderFacade: IDataProviderFacade {
   func follow(by userID: User.ID, handler: @escaping UserResult) {
     LockingView.lock()
     guard mode == .online else {
+      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
       return
     }
@@ -205,30 +204,30 @@ final class DataProviderFacade: IDataProviderFacade {
   func unfollow(by userID: User.ID, handler: @escaping UserResult) {
     LockingView.lock()
     guard mode == .online else {
+      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
       return
     }
-
     onlineProvider.unfollow(by: userID, handler: handler)
   }
 
   func usersFollowingUser(by userID: User.ID, handler: @escaping UsersResult) {
     LockingView.lock()
     guard mode == .online else {
+      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
       return
     }
-
     onlineProvider.usersFollowingUser(by: userID, handler: handler)
   }
 
   func usersFollowedByUser(by userID: User.ID, handler: @escaping UsersResult) {
     LockingView.lock()
     guard mode == .online else {
+      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
       return
     }
-
     onlineProvider.usersFollowedByUser(by: userID, handler: handler)
   }
 
@@ -294,7 +293,6 @@ final class DataProviderFacade: IDataProviderFacade {
       handler(.failure(.unavailableInOfflineMode))
       return
     }
-
     onlineProvider.usersLikedSpecificPost(by: postID, handler: handler)
   }
 
@@ -325,16 +323,12 @@ extension DataProviderFacade: ILoginFlow {
       onlineProvider.loginToServer(signInModel: signInModel, handler: handler)
     } else {
       if let token = KeychainService.getToken() {
-        LockingView.unlock()
         handler(.success(TokenModel(token: token)))
       }
     }
   }
 
   func checkToken(handler: @escaping EmptyResult) {
-    defer {
-      LockingView.unlock()
-    }
     LockingView.lock()
     onlineProvider.checkToken {result in
       switch result {

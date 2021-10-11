@@ -118,16 +118,11 @@ final class LoginViewController: UIViewController {
         DispatchQueue.main.async {
           self.alert(error: error) {_ in
             switch error {
-            case .tokenExpired:
-              return
-            case .networkError(error: _):
-              return
-            case .noDataReceived:
-              return
-            case .noTokenStored:
+            case.serverUnreachable:
+              viewModel.alertOKButtonTapped()
             return
             default:
-              viewModel.alertOKButtonTapped()
+              return
             }
           }
         }

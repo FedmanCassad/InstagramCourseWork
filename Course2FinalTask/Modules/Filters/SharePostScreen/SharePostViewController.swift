@@ -74,6 +74,11 @@ class SharePostViewController: UIViewController {
         tabBar.feedNavigationController.popToRootViewController(animated: false)
       }
     }
+
+    viewModel.error.bind {[unowned self] error in
+      guard let error = error else { return }
+      alert(error: error)
+    }
   }
 
   private func activateConstraints() {

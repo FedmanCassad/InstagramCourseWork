@@ -27,9 +27,6 @@ protocol IPersistentDataProvider {
   /// - Parameter keys: словарь ключей по которым будут запрошены посты. (обычно по userID(author))
   func getSpecificPostsFromPersistentStore(by keys: [String: Any]) -> [CDPost]
 
-  /// Сохраняем все посты которые есть
-  /// - Parameter posts: массив наших обычных Codable постов.
-  func saveFeed(posts: [Post])
   /// Сохраняем пост
   /// - Parameter post: - пост для сохранения
   func savePost(post: Post)
@@ -42,14 +39,6 @@ protocol IPersistentDataProvider {
 }
 
 final class PersistentDataProvider: IPersistentDataProvider {
-
-  func getCurrentUserID() -> String? {
-    defer {
-      LockingView.unlock()
-    }
-    guard let loggedUser = provider.fetchData(for: LoggedUser.self)?.first else { return nil }
-    return loggedUser.id
-  }
 
   static let shared = PersistentDataProvider()
   var provider: CoreDataService = CoreDataService(dataModelName: "OfflineCache")
@@ -77,6 +66,14 @@ final class PersistentDataProvider: IPersistentDataProvider {
     provider.save()
   }
 
+  func getCurrentUserID() -> String? {
+    defer {
+      LockingView.unlock()
+    }
+    guard let loggedUser = provider.fetchData(for: LoggedUser.self)?.first else { return nil }
+    return loggedUser.id
+  }
+
   func saveUserToPersistentStore(user: User) {
     defer {
       LockingView.unlock()
@@ -84,7 +81,6 @@ final class PersistentDataProvider: IPersistentDataProvider {
     let object: CDUser = provider.createObject()
     object.prepareFromCodableUser(user: user)
     provider.save()
-
   }
 
   func getFeedFromPersistentStore() -> [Post] {
@@ -116,18 +112,6 @@ final class PersistentDataProvider: IPersistentDataProvider {
                                                   SearchPredicateConstructor.getUserPredicate(by: id))
     guard let user = provider.fetchData(for: CDUser.self, with: compoundPredicate)?.first else { return nil }
     return User(from: user)
-  }
-
-  func saveFeed(posts: [Post]) {
-    defer {
-      LockingView.unlock()
-    }
-    let _: [CDPost] = posts.map {
-      let post: CDPost = provider.createObject()
-      post.prepareFromCodablePost(post: $0)
-      return post
-    }
-    provider.save()
   }
 
   func savePost(post: Post) {

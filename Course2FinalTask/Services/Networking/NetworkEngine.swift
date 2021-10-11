@@ -167,14 +167,15 @@ class NetworkEngine: INetworkEngine {
     print(request.url!.absoluteString)
     session.dataTask(with: request) {data, _, error in
       if let error = error {
+        LockingView.unlock()
         completion(.failure(.networkError(error: error)))
       }
       if let data = data {
+        LockingView.unlock()
         let value = self.parseData(data: data) as T?
         completion(value != nil ?
                     .success(value!) :
                     .failure(.parsingFailed))
-        LockingView.unlock()
       }
     }.resume()
   }
