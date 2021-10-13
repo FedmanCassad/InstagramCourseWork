@@ -20,6 +20,7 @@ public enum ErrorHandlingDomain: Error, Equatable {
   case noTokenStored
   case unavailableInOfflineMode
   case networkError(error: Error)
+  
   var localizedDescription: (String, String) {
     switch self {
     case
