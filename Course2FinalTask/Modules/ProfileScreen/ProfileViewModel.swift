@@ -3,7 +3,7 @@ import UIKit
 protocol IProfileViewModel {
 
   /// Пользователь для отображения в хедере
-  var user: User? { get }
+  var user: User? { get set }
 
   /// Массив публикаций пользователя для отображения картинок публикаций в collectionView
   var posts: [Post]? { get set }
@@ -37,19 +37,31 @@ final class ProfileViewModel: IProfileViewModel {
   }
 
   func performPostsRequest(with handler: @escaping() -> Void) {
-    guard let user = user else {
-      return
-    }
-
-    dataProvider.findPosts(by: user.id) {[weak self] result in
-      switch result {
-      case let .failure(error):
-        self?.error = Dynamic(error)
-      case let .success(posts):
-        self?.posts = posts
-        handler()
+    func findPosts(by id: String) {
+      dataProvider.findPosts(by: id) {[weak self] result in
+        switch result {
+        case let .failure(error):
+          self?.error = Dynamic(error)
+        case let .success(posts):
+          self?.posts = posts
+          handler()
+        }
       }
     }
+
+    guard let user = user else {
+      dataProvider.getCurrentUser {[weak self] result in
+        switch result {
+        case .failure(let error):
+          self?.error.value = error
+        case .success(let user):
+          self?.user = user
+          findPosts(by: user.id)
+        }
+      }
+      return
+    }
+    findPosts(by: user.id)
   }
 
   func receiveURLForSpecificIndexPath(for indexPath: IndexPath) -> URL? {

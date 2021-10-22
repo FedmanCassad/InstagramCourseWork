@@ -69,7 +69,7 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
 
   private var provider: IDataProviderFacade = DataProviderFacade.shared
 
-  init(user: User? = NetworkEngine.shared.currentUser) {
+  init(user: User? = DataProviderFacade.shared.currentUser) {
     self.user = Dynamic(user!)
     self.logoutSuccess = Dynamic(false)
     self.error = Dynamic(nil)

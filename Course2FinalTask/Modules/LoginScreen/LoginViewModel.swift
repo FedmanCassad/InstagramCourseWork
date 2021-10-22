@@ -109,9 +109,9 @@ final class LoginViewModel: ILoginViewModel {
               self?.error.value = error
             }
           }
-        case  .failure(let error):
+        case  .failure(_):
           LockingView.unlock()
-          self.error.value = error
+          self.error.value = .wrongCredentials
         }
       }
     }

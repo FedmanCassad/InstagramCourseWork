@@ -149,11 +149,7 @@ final class DataProviderFacade: IDataProviderFacade {
     mode = .online
   }
 
-  private init() {
-    guard let currentUser = offlineProvider.getCurrentUserFromPersistentStore() else {
-      return }
-    self.currentUser = User(from: currentUser)
-  }
+  private init() {}
 
   func getCurrentUser(handler: @escaping UserResult) {
     LockingView.lock()
