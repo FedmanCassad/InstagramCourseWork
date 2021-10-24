@@ -73,7 +73,7 @@ final class LoginViewModel: ILoginViewModel {
       error.value = .noTokenStored
       return
     }
-    dataProvider.checkToken {[unowned self] result in
+    dataProvider.checkToken { [unowned self] result in
       switch result {
       case .success:
         performLoginFlow()
@@ -90,6 +90,7 @@ final class LoginViewModel: ILoginViewModel {
   
   private func performLoginFlow() {
     LockingView.lock()
+    // FIXME: Лучше guard
     if let login = loginText,
        let password = passwordText {
       let signInModel = SignInModel(login: login, password: password)
@@ -109,7 +110,7 @@ final class LoginViewModel: ILoginViewModel {
               self?.error.value = error
             }
           }
-        case  .failure(let error):
+        case .failure(let error):
           LockingView.unlock()
           self.error.value = error
         }
@@ -121,8 +122,8 @@ final class LoginViewModel: ILoginViewModel {
     guard checkSavedToken() else {
       error.value = .noTokenStored
       return }
-    securityService.authenticateUser {[unowned self] loginSuccessful in
-      if loginSuccessful {
+    securityService.authenticateUser {[unowned self] isLoginSuccessful in
+      if isLoginSuccessful {
         guard let login = KeychainService.getLogin(),
               let password = KeychainService.getPassword() else { return }
         needFillTextFieldsFromSafeStorage?(login, password)

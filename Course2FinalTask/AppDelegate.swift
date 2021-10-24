@@ -13,7 +13,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   private func initiateWindow() {
-    let loginViewController = LoginViewController()
+    let loginViewController = LoginViewController() {
+      let tabBarController = InstaTabBarController()
+      // TODO: Довольно жесткое переключение. Лучше было бы пушить в нав контроллер или анимированно дисмисить окно логин вью контроллера, предварительно установленное модально (без анимации) поверх ленты, чтобы красиво открывалась лента.
+      UIApplication.shared.windows.first?.rootViewController = tabBarController
+    }
     window = UIWindow(frame: UIScreen.main.bounds)
     window?.rootViewController = loginViewController
     window?.makeKeyAndVisible()

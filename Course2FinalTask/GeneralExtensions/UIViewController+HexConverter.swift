@@ -1,7 +1,9 @@
 import UIKit
 
 extension UIColor {
-  static func hexStringToUIColor (hex: String) -> UIColor {
+  
+  // TODO: Это лучше было бы сделать просто инитом, который принимает hex строку
+  static func hexStringToUIColor(hex: String) -> UIColor {
     var cString: String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
     if cString.hasPrefix("#") {
       cString.remove(at: cString.startIndex)
