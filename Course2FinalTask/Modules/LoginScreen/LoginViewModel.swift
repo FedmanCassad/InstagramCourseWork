@@ -120,9 +120,10 @@ final class LoginViewModel: ILoginViewModel {
   func checkSavedCredentials() {
     guard checkSavedToken() else {
       error.value = .noTokenStored
-      return }
-    securityService.authenticateUser {[unowned self] loginSuccessful in
-      if loginSuccessful {
+      return
+    }
+    securityService.authenticateUser {[unowned self] isLoginSuccessful in
+      if isLoginSuccessful {
         guard let login = KeychainService.getLogin(),
               let password = KeychainService.getPassword() else { return }
         needFillTextFieldsFromSafeStorage?(login, password)

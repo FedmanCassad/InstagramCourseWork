@@ -57,7 +57,7 @@ extension UsersListViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let profileViewModelToShow = viewModel.getProfileViewModel(forUserAt: indexPath)
     let profileVC = ProfileViewController(with: profileViewModelToShow)
-    navigationController?.pushViewController(profileVC, animated: false)
+    navigationController?.pushViewController(profileVC, animated: true)
   }
 
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

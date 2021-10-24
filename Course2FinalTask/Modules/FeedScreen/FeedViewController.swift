@@ -43,11 +43,11 @@ final class FeedViewController: UIViewController {
     configureDataSource()
     setupBindings()
     view.addSubview(tableView)
+    viewModel.requestFeedPosts(optionalHandler: nil)
   }
 
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    viewModel.requestFeedPosts(optionalHandler: nil)
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
   }
 
   override func viewDidLayoutSubviews() {

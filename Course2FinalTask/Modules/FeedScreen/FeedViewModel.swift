@@ -65,7 +65,7 @@ final class FeedViewModel: IFeedViewModel {
         var snapshot = FeedSnapshot()
         snapshot.appendSections([0])
         snapshot.appendItems(posts)
-        applySnapshot(snapshot: snapshot, animating: true)
+        applySnapshot(snapshot: snapshot, animating: false)
       }
     }
   }
