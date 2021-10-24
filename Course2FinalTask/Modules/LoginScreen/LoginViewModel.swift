@@ -73,7 +73,7 @@ final class LoginViewModel: ILoginViewModel {
       error.value = .noTokenStored
       return
     }
-    dataProvider.checkToken {[unowned self] result in
+    dataProvider.checkToken { [unowned self] result in
       switch result {
       case .success:
         performLoginFlow()
@@ -90,6 +90,7 @@ final class LoginViewModel: ILoginViewModel {
   
   private func performLoginFlow() {
     LockingView.lock()
+    // FIXME: Лучше guard
     if let login = loginText,
        let password = passwordText {
       let signInModel = SignInModel(login: login, password: password)

@@ -48,7 +48,8 @@ final class AddImageViewController: UIViewController {
   private func setupBindings() {
     viewModel.imageHasBeenSelected = {[weak self] image in
       let chooseFilterVC = ChooseFilterViewController(ChooseFilterScreenViewModel(image: image))
-      self?.navigationController?.pushViewController(chooseFilterVC, animated: true)
+      // Лайфхак
+      self?.show(chooseFilterVC, sender: self)
     }
 
     viewModel.error.bind {[weak self] error in

@@ -3,6 +3,7 @@ import UIKit
 final class LoginViewController: UIViewController {
   
   // MARK: - Properties
+  // FIXME: По хорошему, лучше было бы сделать viewModel слабой ссылкой и передавать значение извне не в инициализаторе.
   let viewModel: ILoginViewModel
   let loginSuccessfulTabBarLoader: (() -> Void)?
   
@@ -16,14 +17,16 @@ final class LoginViewController: UIViewController {
     textField.placeholder = L.loginPlaceholder()
     textField.keyboardType = .emailAddress
     textField.toAutoLayout()
-    textField.addCornerEffects(cornerRadius: 5,
-                               fillColor: .white,
-                               shadowColor: .black.withAlphaComponent(0.2),
-                               shadowOffset: CGSize(width: 0, height: 0),
-                               shadowOpacity: 1.0,
-                               shadowRadius: 25.0,
-                               borderColor: .clear,
-                               borderWidth: 0)
+    textField.addCornerEffects(
+      cornerRadius: 5,
+      fillColor: .white,
+      shadowColor: .black.withAlphaComponent(0.2),
+      shadowOffset: .zero,
+      shadowOpacity: 1.0,
+      shadowRadius: 25.0,
+      borderColor: .clear,
+      borderWidth: 0
+    )
     return textField
   }()
   
@@ -36,14 +39,16 @@ final class LoginViewController: UIViewController {
     textField.keyboardType = .asciiCapable
     textField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
     textField.placeholder = L.passwordPlaceholder()
-    textField.addCornerEffects(cornerRadius: 5,
-                               fillColor: .white,
-                               shadowColor: .black.withAlphaComponent(0.2),
-                               shadowOffset: CGSize(width: 0, height: 0),
-                               shadowOpacity: 1.0,
-                               shadowRadius: 25.0,
-                               borderColor: .clear,
-                               borderWidth: 0)
+    textField.addCornerEffects(
+      cornerRadius: 5,
+      fillColor: .white,
+      shadowColor: .black.withAlphaComponent(0.2),
+      shadowOffset: .zero,
+      shadowOpacity: 1.0,
+      shadowRadius: 25.0,
+      borderColor: .clear,
+      borderWidth: 0
+    )
     textField.toAutoLayout()
     return textField
   }()
@@ -65,6 +70,8 @@ final class LoginViewController: UIViewController {
   
   init(viewModel: ILoginViewModel = LoginViewModel(), loginSuccessful: (() -> Void)? = nil) {
     // swiftlint:disable:next force_cast
+    self.completion = completion
+    // FIXME: Форс анрап тут приводит к излишнему риску крэша. У тебя же и так вью модель соответствует протоколу. В протоколе по идее должно быть всё, что нужно. Если чего-то не хватает, это надо добавить в протокол. И обращаться к вью модели, как к интерфейсу, а не как к конкретному классу. Тогда реализация будет зависеть от абстракции, а не от реализации, что соответствует букве D в SOLID
     self.viewModel = viewModel as! LoginViewModel
     self.loginSuccessfulTabBarLoader = loginSuccessful
     super.init(nibName: nil, bundle: nil)
@@ -103,10 +110,12 @@ final class LoginViewController: UIViewController {
       loginNameTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
       loginNameTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
       loginNameTextField.heightAnchor.constraint(equalToConstant: 45),
+      
       passwordTextField.leadingAnchor.constraint(equalTo: loginNameTextField.leadingAnchor),
       passwordTextField.trailingAnchor.constraint(equalTo: loginNameTextField.trailingAnchor),
       passwordTextField.heightAnchor.constraint(equalTo: loginNameTextField.heightAnchor),
       passwordTextField.topAnchor.constraint(equalTo: loginNameTextField.bottomAnchor, constant: 8),
+      
       signInButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
       signInButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
       signInButton.topAnchor.constraint(greaterThanOrEqualTo: passwordTextField.bottomAnchor, constant: 55),
@@ -116,10 +125,15 @@ final class LoginViewController: UIViewController {
   
   // MARK: - Configuring bindings
   private func setBindings() {
-    viewModel.error.bind {[unowned self] error in
+    
+    // Не сразу понятен смысл этого колбэка. Стоит написать, для чего он нужен.
+    // Почему unowned? А вдруг крашнется? Лучше не ставить unowned там, где непрозрачен факт того, что не крашнется.
+    viewModel.error.bind { [unowned self] error in
+      // FIXME: Лучше использовать guard let, чтобы избавиться от одной вложенности в без того многоуровневом коде.
       if let error = error {
         DispatchQueue.main.async {
-          self.alert(error: error) {_ in
+          // FIXME: Если unowned self, то писать self не нужно. После фигурной скобки лучше ставить пробел.
+          alert(error: error) { _ in
             switch error {
             case .serverUnreachable:
               viewModel.alertOKButtonTapped()
@@ -157,20 +171,18 @@ final class LoginViewController: UIViewController {
   }
 }
 
-// MARK: - Textfield delegate methods
+// MARK: - UITextFieldDelegate
 extension LoginViewController: UITextFieldDelegate {
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     if textField == loginNameTextField {
       passwordTextField.becomeFirstResponder()
       return true
-    } else {
-      if viewModel.authFieldsNotEmpty {
-        view.endEditing(true)
-        viewModel.signInButtonTapped()
-        return true
-      }
+    } else if viewModel.authFieldsNotEmpty {
+      view.endEditing(true)
+      viewModel.signInButtonTapped()
       return true
     }
+    return false
   }
   
   @objc
