@@ -13,9 +13,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   private func initiateWindow() {
+    window = UIWindow(frame: UIScreen.main.bounds)
     let loginViewController = LoginViewController() { [weak self] in
       let tabBarController = InstaTabBarController()
-      self?.window?.rootViewController = tabBarController
+      guard let window = self?.window else { return }
+      window.rootViewController = tabBarController
       UIView.transition(with: window,
                        duration: 0.3,
                        options: .transitionFlipFromLeft,
@@ -23,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                        completion: nil)
     }
     
-    window = UIWindow(frame: UIScreen.main.bounds)
+
     window?.rootViewController = loginViewController
     window?.makeKeyAndVisible()
   }
