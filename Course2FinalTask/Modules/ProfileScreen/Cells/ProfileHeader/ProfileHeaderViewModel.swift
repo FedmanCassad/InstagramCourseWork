@@ -51,11 +51,11 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
   var error: Dynamic<ErrorHandlingDomain?>
 
   var followersText: String {
-    L.followersLabelTitle() + String(user.value.followedByCount)
+    R.string.localizable.followersLabelTitle() + String(user.value.followedByCount)
   }
 
   var followingsText: String {
-    L.followedLabelTitle() + String(user.value.followsCount)
+    R.string.localizable.followedLabelTitle() + String(user.value.followsCount)
   }
 
   var avatarImageData: Data? {
@@ -63,7 +63,7 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
   }
 
   var followOrUnfollowButtonTitle: String {
-    let title = user.value.currentUserFollowsThisUser ? L.unfollowButtonTitle() : L.followButtonTitle()
+    let title = user.value.currentUserFollowsThisUser ? R.string.localizable.unfollowButtonTitle() : R.string.localizable.followButtonTitle()
     return title
   }
 
