@@ -55,7 +55,7 @@ class HeaderView: UICollectionReusableView {
   lazy var logOutButton: UIButton = {
     let button = UIButton()
     button.toAutoLayout()
-    button.setTitle(L.logOutButtonTitle(), for: .normal)
+    button.setTitle(R.string.localizable.logOutButtonTitle(), for: .normal)
     button.backgroundColor = UIColor.hexStringToUIColor(hex: "#007AFF")
     button.layer.cornerRadius = 5
     button.setTitleColor(.white, for: .normal)

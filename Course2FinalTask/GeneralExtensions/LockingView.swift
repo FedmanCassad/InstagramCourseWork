@@ -6,13 +6,13 @@ final class LockingView {
 
   static func lock() {
     prepareIndicator()
-    DispatchQueue.main.async {
+      DispatchQueue.main.async {
       activityIndicator.startAnimating()
     }
   }
 
   static func unlock() {
-    DispatchQueue.main.async {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
       activityIndicator.stopAnimating()
       activityIndicator.removeFromSuperview()
     }

@@ -10,9 +10,6 @@ typealias EmptyResult = (Result<Void, ErrorHandlingDomain>) -> Void
 typealias ImageCachingClosure = (Result<RetrieveImageResult, KingfisherError>) -> Void
 // swiftlint:disable:next type_name
 
-// TODO: Так лучше не сокращать
-typealias L = R.string.localizable
-
 protocol ImageDataSavingAgent {
   func saveAvatarData(data: Data)
   func savePostImageData(data: Data)
