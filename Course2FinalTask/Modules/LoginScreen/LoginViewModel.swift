@@ -90,9 +90,9 @@ final class LoginViewModel: ILoginViewModel {
   
   private func performLoginFlow() {
     LockingView.lock()
-    // FIXME: Лучше guard
-    if let login = loginText,
-       let password = passwordText {
+    // RESOLVED
+    guard  let login = loginText,
+       let password = passwordText else { return }
       let signInModel = SignInModel(login: login, password: password)
       dataProvider.loginToServer(signInModel: signInModel) {[unowned self] result in
         switch result {
@@ -115,7 +115,6 @@ final class LoginViewModel: ILoginViewModel {
           self.error.value = error
         }
       }
-    }
   }
   
   func checkSavedCredentials() {

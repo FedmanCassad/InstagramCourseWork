@@ -8,7 +8,6 @@ typealias PostsResult = (Result<[Post], ErrorHandlingDomain>) -> Void
 typealias TokenResult = (Result<TokenModel, ErrorHandlingDomain>) -> Void
 typealias EmptyResult = (Result<Void, ErrorHandlingDomain>) -> Void
 typealias ImageCachingClosure = (Result<RetrieveImageResult, KingfisherError>) -> Void
-// swiftlint:disable:next type_name
 
 protocol ImageDataSavingAgent {
   func saveAvatarData(data: Data)

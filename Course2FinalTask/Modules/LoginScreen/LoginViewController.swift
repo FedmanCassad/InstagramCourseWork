@@ -3,34 +3,26 @@ import UIKit
 final class LoginViewController: UIViewController {
 
     // MARK: - Properties
-    // FIXME: По хорошему, лучше было бы сделать viewModel слабой ссылкой и передавать значение извне не в инициализаторе.
+    // RESOLVED: - В данном случае не нужно, избыточно.
     let viewModel: ILoginViewModel
     private var completion: (() -> Void)?
 
-    // FIXME: Все торчащие наружу свойства и методы лучше сделать приватными
+    // RESOLVED
     private lazy var loginNameTextField: UITextField = {
         let textField = UITextField()
         textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
         textField.delegate = self
         textField.returnKeyType = .next
         textField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
         textField.placeholder = R.string.localizable.loginPlaceholder()
         textField.keyboardType = .emailAddress
         textField.toAutoLayout()
-        textField.addCornerEffects(
-            cornerRadius: 5,
-            fillColor: .white,
-            shadowColor: .black.withAlphaComponent(0.2),
-            shadowOffset: .zero,
-            shadowOpacity: 1.0,
-            shadowRadius: 25.0,
-            borderColor: .clear,
-            borderWidth: 0
-        )
+        textField.addCornerEffects()
         return textField
     }()
 
-    lazy var passwordTextField: UITextField = {
+    private lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.autocorrectionType = .no
         textField.delegate = self
@@ -39,24 +31,15 @@ final class LoginViewController: UIViewController {
         textField.keyboardType = .asciiCapable
         textField.addTarget(self, action: #selector(textChanged(_:)), for: .editingChanged)
         textField.placeholder = R.string.localizable.passwordPlaceholder()
-        textField.addCornerEffects(
-            cornerRadius: 5,
-            fillColor: .white,
-            shadowColor: .black.withAlphaComponent(0.2),
-            shadowOffset: .zero,
-            shadowOpacity: 1.0,
-            shadowRadius: 25.0,
-            borderColor: .clear,
-            borderWidth: 0
-        )
+        textField.addCornerEffects()
         textField.toAutoLayout()
         return textField
     }()
 
-    lazy var signInButton: UIButton = {
-        // FIXME: Кнопки лучше всегда делать с типом system. Подробности, почему лучше так, смотри здесь: https://developer.apple.com/videos/play/wwdc2018/803/?time=3000
-        let button = UIButton()
-        button.backgroundColor = UIColor.hexStringToUIColor(hex: "#007AFF")
+    private lazy var signInButton: UIButton = {
+// RESOLVED
+        let button = UIButton(type: .system)
+        button.backgroundColor = UIColor("#007AFF")
         button.tintColor = .white
         button.setTitle(R.string.localizable.signInButtonTitle(), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
@@ -67,14 +50,10 @@ final class LoginViewController: UIViewController {
         return button
     }()
 
-
-
     // MARK: - Initializers
 
     init(viewModel: ILoginViewModel = LoginViewModel(), completion: (() -> Void)? = nil) {
-        // swiftlint:disable:next force_cast
         self.completion = completion
-
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         overrideUserInterfaceStyle = .light
@@ -109,7 +88,11 @@ final class LoginViewController: UIViewController {
         NSLayoutConstraint.activate([
             loginNameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             loginNameTextField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            loginNameTextField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            loginNameTextField.trailingAnchor
+                .constraint(
+                    equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                    constant: -16
+                ),
             loginNameTextField.heightAnchor.constraint(equalToConstant: 45),
 
             passwordTextField.leadingAnchor.constraint(equalTo: loginNameTextField.leadingAnchor),
@@ -126,18 +109,17 @@ final class LoginViewController: UIViewController {
 
     // MARK: - Configuring bindings
     private func setBindings() {
-
-        // Не сразу понятен смысл этого колбэка. Стоит написать, для чего он нужен.
-        // Почему unowned? А вдруг крашнется? Лучше не ставить unowned там, где непрозрачен факт того, что не крашнется.
-        viewModel.error.bind { [unowned self] error in
-            // FIXME: Лучше использовать guard let, чтобы избавиться от одной вложенности в без того многоуровневом коде.
-            if let error = error {
+        viewModel.error.bind { [weak self] error in
+            // RESOLVED
+            // В error биндится замыкание - когда в модели прилетает из какого-либо сервиса ошибка - она немедленно отображается в alertController'е, но есть нюанс. См ниже.
+            guard let error = error else { return }
                 DispatchQueue.main.async {
-                    // FIXME: Если unowned self, то писать self не нужно. После фигурной скобки лучше ставить пробел.
-                    alert(error: error) { _ in
+                    // RESOLVED
+                    self?.alert(error: error) { _ in
+                            // В случае если, нам после отображения ошибки
                         switch error {
                         case .serverUnreachable:
-                            viewModel.alertOKButtonTapped()
+                            self?.viewModel.alertOKButtonTapped()
                             return
 
                         default:
@@ -145,7 +127,7 @@ final class LoginViewController: UIViewController {
                         }
                     }
                 }
-            }
+
         }
 
         viewModel.loginSuccessful = { [weak self] in

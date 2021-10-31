@@ -56,7 +56,7 @@ class HeaderView: UICollectionReusableView {
     let button = UIButton()
     button.toAutoLayout()
     button.setTitle(R.string.localizable.logOutButtonTitle(), for: .normal)
-    button.backgroundColor = UIColor.hexStringToUIColor(hex: "#007AFF")
+    button.backgroundColor = UIColor("#007AFF")
     button.layer.cornerRadius = 5
     button.setTitleColor(.white, for: .normal)
     button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)

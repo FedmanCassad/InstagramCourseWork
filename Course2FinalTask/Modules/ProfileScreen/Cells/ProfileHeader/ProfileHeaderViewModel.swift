@@ -63,7 +63,9 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
   }
 
   var followOrUnfollowButtonTitle: String {
-    let title = user.value.currentUserFollowsThisUser ? R.string.localizable.unfollowButtonTitle() : R.string.localizable.followButtonTitle()
+    let title = user.value.currentUserFollowsThisUser
+      ? R.string.localizable.unfollowButtonTitle()
+      : R.string.localizable.followButtonTitle()
     return title
   }
 
