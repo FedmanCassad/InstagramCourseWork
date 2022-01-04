@@ -10,7 +10,6 @@ final class CoreDataService {
   private let container: NSPersistentContainer
   private var context: NSManagedObjectContext!
   private var taskContext: NSManagedObjectContext!
-  private var taskQueue: DispatchQueue = DispatchQueue(label: "CoreDataQueue", qos: .utility, attributes: .concurrent)
 
   init(dataModelName: String) {
     self.modelName = dataModelName
@@ -23,12 +22,9 @@ final class CoreDataService {
       if let error = error {
         print(error.localizedDescription)
       } else {
-      self?.context = self?.container.viewContext
-        self?.taskQueue.async {
-          self?.taskContext = self?.container.newBackgroundContext()
-          self?.taskContext.mergePolicy = NSMergePolicy.overwrite
-        }
-
+        self?.context = self?.container.viewContext
+        self?.taskContext = self?.container.newBackgroundContext()
+        self?.taskContext.mergePolicy = NSMergePolicy.overwrite
       }
     }
   }

@@ -64,6 +64,7 @@ final class UsersListCell: UITableViewCell {
   private func setupBindings() {
     viewModel?.user.bindAndPerform {[unowned self] tempUser in
       let user = tempUser
+      // For real device testing
       if NetworkEngine.shared.location == .LANIP {
         user.avatar = URL(
           string: user.avatar.absoluteString.replacingOccurrences(
@@ -84,5 +85,4 @@ final class UsersListCell: UITableViewCell {
   @objc func selectProfile() {
     viewModel?.userCellSelected()
   }
-
 }

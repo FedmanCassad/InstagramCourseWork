@@ -59,6 +59,28 @@ class SharePostViewController: UIViewController {
     activateConstraints()
   }
 
+  private func setupBindings() {
+    viewModel.sharingSuccessful = {[weak self] in
+      guard let self = self,
+            let tabBar = self.tabBarController as? InstaTabBarController else {
+        return
+
+      }
+      tabBar.feedVC.setNeedsRequestPosts = true
+      tabBar.feedVC.scrollToLastPost()
+      DispatchQueue.main.async {
+        tabBar.selectedIndex = 0
+        tabBar.newPostNavigationController.popToRootViewController(animated: false)
+        tabBar.feedNavigationController.popToRootViewController(animated: false)
+      }
+    }
+
+    viewModel.error.bind {[unowned self] error in
+      guard let error = error else { return }
+      alert(error: error)
+    }
+  }
+
   private func activateConstraints() {
     NSLayoutConstraint.activate(
       [
@@ -75,23 +97,6 @@ class SharePostViewController: UIViewController {
     )
   }
 
-  private func setupBindings() {
-    viewModel.sharingSuccessful = {[weak self] in
-      guard let self = self,
-            let tabBar = self.tabBarController as? InstaTabBarController else {
-        return
-
-      }
-      tabBar.feedVC.setNeedsRequestPosts = true
-      tabBar.feedVC.scrollToLastPost()
-      DispatchQueue.main.async {
-        tabBar.selectedIndex = 0
-        tabBar.newPostNavigationController.popToRootViewController(animated: false)
-        tabBar.feedNavigationController.popToRootViewController(animated: false)
-      }
-    }
-  }
-
   @objc func sharePost() {
     viewModel.shareButtonTapped()
   }
@@ -99,5 +104,4 @@ class SharePostViewController: UIViewController {
   @objc func textChanged(sender: UITextField) {
     viewModel.description = sender.text ?? ""
   }
-
 }

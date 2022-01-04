@@ -59,8 +59,14 @@ class ChooseFilterViewController: UIViewController {
     viewModel.mainImage.bind {[unowned self] image in
       mainImageView.image = image
     }
+
     viewModel.applyFilteredImage = {[weak self] image in
       self?.mainImageView.image = image
+    }
+
+    viewModel.error.bind {[unowned self] error in
+      guard let error = error else { return }
+      alert(error: error)
     }
   }
 
@@ -94,5 +100,4 @@ extension ChooseFilterViewController: UICollectionViewDelegateFlowLayout {
     let width = view.frame.width / 3
     return CGSize(width: width, height: height)
   }
-
 }

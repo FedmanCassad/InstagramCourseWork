@@ -1,45 +1,61 @@
-//
-//  ProfileHeaderViewModel.swift
-//  Course2FinalTask
-//
-//  Created by Vladimir Banushkin on 08.08.2021.
-//  Copyright © 2021 e-Legion. All rights reserved.
-//
-
 import Foundation
-public enum UsersListType {
-  case followers, followings
-}
-protocol IProfileHeaderViewModel: AnyObject, ImageDataSavingAgent {
-  var user: Dynamic<User> { get }
-  var isCurrentUser: Dynamic<Bool> { get set }
-  var logoutSuccess: Dynamic<Bool>? { get set }
-  var error: Dynamic<ErrorHandlingDomain?> { get set }
-  var followersOfFollowsListUsers: (([User]) -> Void)? { get set }
-  var followersText: String { get }
-  var followingsText: String { get }
-  var avatarImageData: Data? { get }
-  var followOrUnfollowButtonTitle: String { get }
-  func logOut()
-  func followOrUnfollowButtonTapped()
-  func usersListRequested(by type: UsersListType)
 
+protocol IProfileHeaderViewModel: AnyObject, ImageDataSavingAgent {
+
+  /// Объект User обернутый в Dynamic, при получении value в listener'е происходит конфигурирование UI элементов.
+  var user: Dynamic<User> { get }
+
+  /// В зависимости от значение добавляется кнопка Logout или Follow/Unfollow.
+  var isCurrentUser: Dynamic<Bool> { get set }
+
+  /// Если приходит true, значит подчищены все данные,token инвалидирован, приложение переходит в initial state.
+  var logoutSuccess: Dynamic<Bool>? { get set }
+
+  /// Текст количества подписчиков. Локализован.
+  var followersText: String { get }
+
+  /// Текст количества подписок. Локализован.
+  var followingsText: String { get }
+
+  /// Сырые данные для кэширования в оффлайн хранилище.
+  var avatarImageData: Data? { get }
+
+  /// Текст кнопки подписки/отписки. Локализован.
+  var followOrUnfollowButtonTitle: String { get }
+
+  /// Ошибка, обернута в Dynamic для удобства, в случае присвоения любой ошибки переменной value - вызывается замыкание
+  /// listener - в нашем случае демонстрируется alertController с данным из ошибки.
+  var error: Dynamic<ErrorHandlingDomain?> { get set }
+
+  /// Замыкание в которое приходит массив юзеров. Этот массив прокидывается модели контроллера для последующей
+  /// инициализации и отображения UserListViewController.
+  var presentUsersListViewController: (([User], UpdateFields) -> Void)? { get set }
+
+  /// При нажатии на кнопку logOut обращается к провайдеру DataProvidingFacade который делает всю работу.
+  func logOut()
+
+  /// Реализуется функционал проставления лайка/дизлайка.
+  func followOrUnfollowButtonTapped()
+
+  /// Запрашивает список пользователей
+  /// - Parameter type: в зависимости от параметра запрашиваются либо подписки либо подписчики.
+  func usersListRequested(by type: UsersListType)
 }
 
 final class ProfileHeaderViewModel: IProfileHeaderViewModel {
 
-  var followersOfFollowsListUsers: (([User]) -> Void)?
+  var presentUsersListViewController: (([User], UpdateFields) -> Void)?
   var user: Dynamic<User>
   var isCurrentUser: Dynamic<Bool>
   var logoutSuccess: Dynamic<Bool>?
   var error: Dynamic<ErrorHandlingDomain?>
 
   var followersText: String {
-    "Followers: " + String(user.value.followedByCount)
+    R.string.localizable.followersLabelTitle() + String(user.value.followedByCount)
   }
 
   var followingsText: String {
-    "Following: " + String(user.value.followsCount)
+    R.string.localizable.followedLabelTitle() + String(user.value.followsCount)
   }
 
   var avatarImageData: Data? {
@@ -47,16 +63,19 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
   }
 
   var followOrUnfollowButtonTitle: String {
-    let title = user.value.currentUserFollowsThisUser ? "Unfollow" : "Follow"
+    let title = user.value.currentUserFollowsThisUser
+      ? R.string.localizable.unfollowButtonTitle()
+      : R.string.localizable.followButtonTitle()
     return title
   }
+
   private var provider: IDataProviderFacade = DataProviderFacade.shared
 
-  init(user: User? = NetworkEngine.shared.currentUser) {
+  init(user: User? = DataProviderFacade.shared.currentUser) {
     self.user = Dynamic(user!)
     self.logoutSuccess = Dynamic(false)
     self.error = Dynamic(nil)
-    isCurrentUser = Dynamic(user?.id == DataProviderFacade.shared.currentUser?.id)
+      isCurrentUser = Dynamic(user?.id == DataProviderFacade.shared.currentUser?.id)
     setupSavingBinding()
   }
 
@@ -94,7 +113,8 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
       case let .failure(error):
         self.error.value = error
       case let .success(users):
-        followersOfFollowsListUsers?(users)
+          let updateData = UpdateFields(id: user.value.id, type: type)
+        presentUsersListViewController?(users, updateData)
       }
     }
     if type == .followers {

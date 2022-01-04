@@ -14,12 +14,11 @@ final class ProfilePhotosCell: UICollectionViewCell {
 	func configure(with url: URL) {
     var tempUrl = url
     if NetworkEngine.shared.location == .LANIP {
-      tempUrl = URL(
-        string: url.absoluteString.replacingOccurrences(
-          of: HostLocation.localhost.serverURL.absoluteString,
-          with: HostLocation.LANIP.serverURL.absoluteString
-        )
-      )!
+		tempUrl = URL(
+      string: url.absoluteString.replacingOccurrences(of: "http://localhost:8080",
+                                                      with: HostLocation.LANIP.serverURL.absoluteString
+      )
+    )!
     }
 		contentView.clipsToBounds = true
 		image.kf.setImage(with: tempUrl)

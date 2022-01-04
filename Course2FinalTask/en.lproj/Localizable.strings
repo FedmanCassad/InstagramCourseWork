@@ -8,3 +8,12 @@
 "loginPlaceholder" = "Login";
 "passwordPlaceholder" = "Password";
 "signInButtonTitle" = "Sign In";
+"likesCountLabel" = "Likes: ";
+"followersLabelTitle" = "Followers: ";
+"followedLabelTitle" = "Following: ";
+"followButtonTitle" = "Follow";
+"unfollowButtonTitle" = "Unfollow";
+"feedControllerTitle" = "Feed";
+"newPostControllerTitle" = "New post";
+"profileControllerTitle" = "Profile";
+"logOutButtonTitle" = "Log out";

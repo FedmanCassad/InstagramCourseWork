@@ -1,10 +1,21 @@
 import UIKit
 
 protocol ISharePostScreenViewModel: AnyObject {
+
+  /// Ошибка, обернута в Dynamic для удобства, в случае присвоения любой ошибки переменной value - вызывается замыкание
+  /// listener - в нашем случае демонстрируется alertController с данным из ошибки.
   var error: Dynamic<ErrorHandlingDomain?> { get }
+
+  /// Описание новой публикации
   var description: String { get set }
+
+  /// Объект UIImage для публикации.
   var imageToShare: UIImage { get }
+
+  /// Замыкание вызываемое после удачной публикации.
   var sharingSuccessful: (() -> Void)? { get set }
+
+  /// Публикация происходит здесь.
   func shareButtonTapped ()
 }
 

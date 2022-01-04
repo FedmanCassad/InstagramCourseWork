@@ -1,10 +1,5 @@
 import UIKit
-//
-// enum DestinationMeaning {
-//  case followers
-//  case follows
-// }
-//
+
 public enum ErrorHandlingDomain: Error, Equatable {
 
   public static func == (lhs: ErrorHandlingDomain, rhs: ErrorHandlingDomain) -> Bool {
@@ -25,6 +20,7 @@ public enum ErrorHandlingDomain: Error, Equatable {
   case noTokenStored
   case unavailableInOfflineMode
   case networkError(error: Error)
+  
   var localizedDescription: (String, String) {
     switch self {
     case

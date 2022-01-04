@@ -1,8 +1,16 @@
 import UIKit
 
 protocol IAddImageScreenViewModel: AnyObject {
+
+  /// Массив картинок которые ищутся в бандле. (Лежат в директории New).
   var library: [UIImage] { get set }
+
+  /// Ошибка, обернута в Dynamic для удобства, в случае присвоения любой ошибки переменной value - вызывается замыкание
+  /// listener - в нашем случае демонстрируется alertController с данным из ошибки.
   var error: Dynamic<ErrorHandlingDomain?> { get }
+
+  /// Обработчик нажатия на картинку для связи с контроллером. В замыкание передается объект UIImage для инициализации
+  /// контроллера выбора фильтров и его демонстрации.
   var imageHasBeenSelected: ((UIImage) -> Void)? { get set }
 }
 

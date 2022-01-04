@@ -8,3 +8,12 @@
 "loginPlaceholder" = "Имя пользователя";
 "passwordPlaceholder" = "Пароль";
 "signInButtonTitle" = "Войти";
+"likesCountLabel" = "Лайкнуло: ";
+"followersLabelTitle" = "Подписчики: ";
+"followedLabelTitle" = "Подписки: ";
+"followButtonTitle" = "Подписаться";
+"unfollowButtonTitle" = "Отписаться";
+"feedControllerTitle" = "Лента";
+"newPostControllerTitle" = "Создать пост";
+"profileControllerTitle" = "Профиль";
+"logOutButtonTitle" = "Выйти";

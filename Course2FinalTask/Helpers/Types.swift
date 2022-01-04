@@ -1,11 +1,3 @@
-//
-//  Types.swift
-//  Course2FinalTask
-//
-//  Created by Vladimir Banushkin on 01.10.2021.
-//  Copyright © 2021 e-Legion. All rights reserved.
-//
-
 import Foundation
 import Kingfisher
 
@@ -20,4 +12,8 @@ typealias ImageCachingClosure = (Result<RetrieveImageResult, KingfisherError>) -
 protocol ImageDataSavingAgent {
   func saveAvatarData(data: Data)
   func savePostImageData(data: Data)
+}
+
+public enum UsersListType {
+  case followers, followings
 }

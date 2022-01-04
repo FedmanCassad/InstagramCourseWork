@@ -18,7 +18,7 @@ final class FeedViewController: UIViewController {
   var setNeedsRequestPosts: Bool = false {
     didSet {
       if setNeedsRequestPosts {
-        viewModel.requestFeedPosts()
+        viewModel.requestFeedPosts(optionalHandler: nil)
         setNeedsRequestPosts = false
       }
     }
@@ -43,11 +43,11 @@ final class FeedViewController: UIViewController {
     configureDataSource()
     setupBindings()
     view.addSubview(tableView)
+    viewModel.requestFeedPosts(optionalHandler: nil)
   }
 
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    viewModel.requestFeedPosts()
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
   }
 
   override func viewDidLayoutSubviews() {
@@ -113,8 +113,10 @@ final class FeedViewController: UIViewController {
 
 // MARK: - UITableViewDelegate methods here
 extension FeedViewController: UITableViewDelegate {
+
   func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
     guard let cell = cell as? FeedCell else { return }
     cell.cancelImagesLoading()
   }
+
 }

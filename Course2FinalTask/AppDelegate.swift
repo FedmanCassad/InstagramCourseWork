@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  Course2FinalTask
-//
-//  Copyright © 2018 e-Legion. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain
@@ -20,8 +13,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   private func initiateWindow() {
-    let loginViewController = LoginViewController()
-    window = UIWindow(frame: UIScreen.main.bounds)
+      window = UIWindow(frame: UIScreen.main.bounds)
+    let loginViewController = LoginViewController { [weak self] in
+        let tabBarController = InstaTabBarController()
+      // RESOLVED
+        guard let window = self?.window else { return }
+        window.rootViewController = tabBarController
+        UIView.transition(with: window,
+                          duration: 0.3,
+                          options: .transitionCurlDown,
+                          animations: nil,
+                          completion: nil)
+
+    }
+
     window?.rootViewController = loginViewController
     window?.makeKeyAndVisible()
   }

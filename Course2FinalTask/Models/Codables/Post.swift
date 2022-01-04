@@ -28,6 +28,7 @@ class Post: Decodable, Identifiable, Hashable {
   }
 
   var performSaving: ((Savable) -> Void)?
+  
   enum CodingKeys: String, CodingKey {
     case postDescription = "description"
     case
