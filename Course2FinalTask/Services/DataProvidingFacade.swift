@@ -263,9 +263,7 @@ final class DataProviderFacade: IDataProviderFacade {
   }
 
   func likePost(by postID: Post.ID, handler: @escaping PostResult) {
-    LockingView.lock()
     guard mode == .online else {
-      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
       return
     }
@@ -273,9 +271,7 @@ final class DataProviderFacade: IDataProviderFacade {
   }
 
   func unlikePost(by postID: Post.ID, handler: @escaping PostResult) {
-    LockingView.lock()
     guard mode == .online else {
-      LockingView.unlock()
       handler(.failure(.unavailableInOfflineMode))
       return
     }

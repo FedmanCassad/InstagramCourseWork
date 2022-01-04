@@ -29,7 +29,7 @@ protocol IProfileHeaderViewModel: AnyObject, ImageDataSavingAgent {
 
   /// Замыкание в которое приходит массив юзеров. Этот массив прокидывается модели контроллера для последующей
   /// инициализации и отображения UserListViewController.
-  var followersOrFollowsListUsers: (([User]) -> Void)? { get set }
+  var presentUsersListViewController: (([User], UpdateFields) -> Void)? { get set }
 
   /// При нажатии на кнопку logOut обращается к провайдеру DataProvidingFacade который делает всю работу.
   func logOut()
@@ -44,7 +44,7 @@ protocol IProfileHeaderViewModel: AnyObject, ImageDataSavingAgent {
 
 final class ProfileHeaderViewModel: IProfileHeaderViewModel {
 
-  var followersOrFollowsListUsers: (([User]) -> Void)?
+  var presentUsersListViewController: (([User], UpdateFields) -> Void)?
   var user: Dynamic<User>
   var isCurrentUser: Dynamic<Bool>
   var logoutSuccess: Dynamic<Bool>?
@@ -75,7 +75,7 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
     self.user = Dynamic(user!)
     self.logoutSuccess = Dynamic(false)
     self.error = Dynamic(nil)
-    isCurrentUser = Dynamic(user?.id == DataProviderFacade.shared.currentUser?.id)
+      isCurrentUser = Dynamic(user?.id == DataProviderFacade.shared.currentUser?.id)
     setupSavingBinding()
   }
 
@@ -113,7 +113,8 @@ final class ProfileHeaderViewModel: IProfileHeaderViewModel {
       case let .failure(error):
         self.error.value = error
       case let .success(users):
-        followersOrFollowsListUsers?(users)
+          let updateData = UpdateFields(id: user.value.id, type: type)
+        presentUsersListViewController?(users, updateData)
       }
     }
     if type == .followers {
