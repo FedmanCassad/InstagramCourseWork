@@ -35,11 +35,17 @@ final class UsersListViewController: UIViewController {
     super.viewDidLoad()
     view.addSubview(tableView)
     view.backgroundColor = .white
+      setupBindings()
   }
 
   override func viewDidLayoutSubviews() {
     activateConstraints()
   }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.updateTableViewIfNeeded()
+    }
 
   // MARK: - Activating autolayout constraints
   private func activateConstraints() {
@@ -50,6 +56,12 @@ final class UsersListViewController: UIViewController {
       tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
     ])
   }
+
+    private func setupBindings() {
+        viewModel.users.bind { [weak self] _ in
+            self?.tableView.reloadData()
+        }
+    }
 }
 
 // MARK: - UITableView delegate methods

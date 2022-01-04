@@ -76,7 +76,7 @@ final class FeedCell: UITableViewCell {
   
   private lazy var commentLabel: UILabel = {
     let button = UILabel()
-    button.numberOfLines = 1
+    button.numberOfLines = 0
     button.toAutoLayout()
     return button
   }()

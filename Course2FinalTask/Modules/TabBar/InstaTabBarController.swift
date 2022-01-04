@@ -2,6 +2,7 @@ import UIKit
 
 final class InstaTabBarController: UITabBarController {
 
+    // Titles for involved controllers
     enum Titles {
         static let feed = R.string.localizable.feedControllerTitle()
         static let addPost = R.string.localizable.newPostControllerTitle()

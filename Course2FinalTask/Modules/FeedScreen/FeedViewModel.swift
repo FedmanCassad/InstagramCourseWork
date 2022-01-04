@@ -25,7 +25,7 @@ protocol IFeedViewModel {
   var updateCellViewModel: ((Int) -> Void)? { get set }
 
   /// Сюда прилетает массив пользователей для дальнейшего отображения их в виде списка.
-  var moveToUsersList: (([User]) -> Void)? { get set }
+    var moveToUsersList: (([User]) -> Void)? { get set }
 
   /// Запрос массива публикаций
   /// - Parameter optionalHandler: опциональный хендлер нужен для реализации unit теста.
@@ -53,7 +53,7 @@ final class FeedViewModel: IFeedViewModel {
   // MARK: - Props
   var error: Dynamic<ErrorHandlingDomain?> = Dynamic(nil)
   var authorTapped: ((IProfileViewModel) -> Void)?
-  var moveToUsersList: (([User]) -> Void)?
+var moveToUsersList: (([User]) -> Void)?
   var updateCellViewModel: ((Int) -> Void)?
   let dataProvider: IDataProviderFacade = DataProviderFacade.shared
   var dataSource: FeedDataSource?

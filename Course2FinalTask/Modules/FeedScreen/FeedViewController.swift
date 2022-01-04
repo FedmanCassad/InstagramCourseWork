@@ -113,8 +113,10 @@ final class FeedViewController: UIViewController {
 
 // MARK: - UITableViewDelegate methods here
 extension FeedViewController: UITableViewDelegate {
+
   func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
     guard let cell = cell as? FeedCell else { return }
     cell.cancelImagesLoading()
   }
+
 }
